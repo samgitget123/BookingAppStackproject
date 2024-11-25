@@ -68,7 +68,7 @@ router.get('/', async (req, res) => {
 });
 
 //Get Ground Details By Ground Id
-router.get('/ground/:ground_id', async (req, res) => {
+router.get('/:ground_id', async (req, res) => {
     try {
         const { ground_id } = req.params;
         const { date } = req.query;  // Use query parameter for date
