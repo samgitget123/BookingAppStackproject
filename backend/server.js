@@ -7,6 +7,7 @@ import connectDB from './config/db.js';
 import groundRoutes from './routes/groundRoutes.js';
 import Booking from './routes/bookingRoutes.js';
 const port = process.env.PORT || 5000;
+import { notfound , errorHandler } from './middleware/errorMiddleware.js';
 //import TestData from './Data/TestData.js';
 
 const app = express();
@@ -22,5 +23,9 @@ app.use('/api/ground' , groundRoutes)
 
 //Booking Route
 app.use('/api/booking' , Booking);
+
+//Error handlers
+app.use(notfound);
+app.use(errorHandler);
 
 app.listen(port , ()=> console.log(`server running on port ${port}`));

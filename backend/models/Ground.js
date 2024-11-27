@@ -27,11 +27,10 @@ const groundSchema = new mongoose.Schema({
         type: Date, 
         default: Date.now 
     },
-    slots: {
-        booked: [String], 
-      },
+    slots: { type: Map, of: { bookedSlots: [String] } }, // Store slots as an object
+   
     
-});
+}, { timestamps: true });
 
 const Ground = mongoose.model('Ground', groundSchema);
 export default Ground;
