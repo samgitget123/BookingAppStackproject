@@ -50,53 +50,7 @@ const ViewGround = () => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [bookings, setBookings] = useState([]);
 
-  // Fetch ground details and booked slots
-  // useEffect(() => {
-  //   if (gid) {
-  //     dispatch(fetchGroundDetails(gid)); // Fetch initial ground details
 
-  //     const fetchGroundDetailsWithDate = async () => {
-  //       const formattedDate = formatDate(selectedDate);
-  //       console.log('Formatted Date:', formattedDate);
-  //       try {
-  //         const response = await axios.get(`http://localhost:5000/ground/${gid}?date=${formattedDate}`);
-  //         // Assuming response.data.slots is an array of booked slots
-  //         const API = `http://localhost:5000/ground/${gid}?date=${formattedDate}`
-  //         setBookings(response.data.slots || []);
-  //         console.log('bookApi', API)
-  //         console.log('bookedaval', bookedSlots);
-  //         console.log('Fetched Booked Slots:', response.data.slots);
-  //       } catch (error) {
-  //         console.error('Error fetching ground details:', error);
-  //       }
-  //     };
-
-  //     fetchGroundDetailsWithDate();
-  //   }
-  // }, [dispatch, gid, selectedDate]); // Dependency array includes selectedDate to refetch data on date change
-  // useEffect(() => {
-  //   if (gid) {
-  //     dispatch(fetchGroundDetails(gid));
-  //     fetchGroundDetailsWithDate(formatDate(selectedDate));
-  //   }
-  // }, [dispatch, gid, selectedDate]);
-
-
-  // const fetchGroundDetailsWithDate = async (formattedDate) => {
-  //   try {
-
-  //     const response = await axios.get(`http://localhost:5000/ground/${gid}?date=${formattedDate}`);
-
-  //     setBookings(response.data.slots.booked || []);
-  //   } catch (error) {
-  //     console.error('Error fetching ground details:', error);
-  //   }
-  // };
-  // const handleDateChange = (date) => {
-  //   if (date) {
-  //     setSelectedDate(date);
-  //   }
-  // };
   useEffect(() => {
     if (gid) {
       dispatch(fetchGroundDetails(gid));
@@ -193,86 +147,25 @@ const ViewGround = () => {
     '10.0', '10.5', // 10:00 AM - 10:30 AM
     '11.0', '11.5', // 11:00 AM - 11:30 AM
     '12.0', '12.5', // 12:00 PM - 12:30 PM
-    '1.0', '1.5',  // 1:00 PM - 1:30 PM
-    '2.0', '2.5',  // 2:00 PM - 2:30 PM
-    '3.0', '3.5',  // 3:00 PM - 3:30 PM
-    '4.0', '4.5',  // 4:00 PM - 4:30 PM
-    '5.0', '5.5',  // 5:00 PM - 5:30 PM
-    '6.0', '6.5',  // 6:00 PM - 6:30 PM
-    '7.0', '7.5',  // 7:00 PM - 7:30 PM
-    '8.0', '8.5',  // 8:00 PM - 8:30 PM
-    '9.0', '9.5',  // 9:00 PM - 9:30 PM
-    '10.0', '10.5', // 10:00 PM - 10:30 PM
-    '11.0', '11.5', // 11:00 PM - 11:30 PM
-    '12.0', '12.5'  // 12:00 AM - 12:30 AM (next day)
+    '13.0', '13.5',  // 1:00 PM - 1:30 PM
+    '14.0', '14.5',  // 2:00 PM - 2:30 PM
+    '15.0', '15.5',  // 3:00 PM - 3:30 PM
+    '16.0', '16.5',  // 4:00 PM - 4:30 PM
+    '17.0', '17.5',  // 5:00 PM - 5:30 PM
+    '18.0', '18.5',  // 6:00 PM - 6:30 PM
+    '19.0', '19.5',  // 7:00 PM - 7:30 PM
+    '20.0', '20.5',  // 8:00 PM - 8:30 PM
+    '21.0', '21.5',  // 9:00 PM - 9:30 PM
+    '22.0', '22.5', // 10:00 PM - 10:30 PM
+    '23.0', '23.5', // 11:00 PM - 11:30 PM
+    '24.0', '24.5'  // 12:00 AM - 12:30 AM (next day)
   ];
-
-  // const bookedSlotTimes = bookedSlots.map(formatSlot);
-  // const slotbooks = bookings.map(formatSlot);
-
-  // const availableSlots = allSlots.filter((slot) => !bookedSlots.includes(slot)).map(formatSlot);
-  // const bookedslotsbydate = bookings.map(formatSlot);
-
-
 
   // Helper function to convert slot value to time range with AM/PM
   const availableSlots = allSlots.filter((slot) => !bookings.includes(slot)).map(formatSlot);
   const bookedslotsbydate = bookings.map(formatSlot);
 
-  // const convertSlotToTimeRange = (slot) => {
-  //   const [hours, half] = slot.split('.').map(Number); // Split hours and half-hour indicator
-
-  //   // Calculate start time in 12-hour format
-  //   const startHour = hours % 12 === 0 ? 12 : hours % 12;
-  //   const startMinutes = half === 0 ? '00' : '30';
-  //   const startPeriod = hours < 12 ? 'AM' : 'PM';
-
-  //   // Calculate end time in 12-hour format
-  //   const endHour = half === 0 ? (hours % 12 === 11 ? 12 : (hours + 1) % 12) : startHour;
-  //   const endMinutes = half === 0 ? '30' : '00';
-  //   const endPeriod = (half === 0 && hours === 11) || (half === 0 && hours + 1 === 12) || hours + 1 >= 12 ? 'PM' : 'AM';
-
-  //   return `${startHour}:${startMinutes} ${startPeriod} - ${endHour}:${endMinutes} ${endPeriod}`;
-  // };
-
-  // const convertSlotToTimeRange = (slot) => {
-  //   let [hours, half] = slot.split('.').map(Number);
-
-  //   // Adjust for 26-hour format (6 AM to 2 AM)
-  //   if (hours >= 6 && hours <= 11) {
-  //     // Morning slots (6 AM - 11 AM)
-  //     const startHour = hours;
-  //     const startMinutes = half === 0 ? '00' : '30';
-  //     const endHour = half === 0 ? hours : hours + 1;
-  //     const endMinutes = half === 0 ? '30' : '00';
-  //     return `${startHour}:${startMinutes} AM - ${endHour}:${endMinutes} AM`;
-  //   } else if (hours === 12) {
-  //     // Noon slots (12 PM)
-  //     const startMinutes = half === 0 ? '00' : '30';
-  //     const endHour = half === 0 ? hours : 1;
-  //     const endMinutes = half === 0 ? '30' : '00';
-  //     return `12:${startMinutes} PM - ${endHour}:${endMinutes} PM`;
-  //   } else if (hours >= 1 && hours <= 7) {
-  //     // Afternoon to early night slots (1 PM - 7 PM)
-  //     const startHour = hours;
-  //     const startMinutes = half === 0 ? '00' : '30';
-  //     const endHour = half === 0 ? hours : hours + 1;
-  //     const endMinutes = half === 0 ? '30' : '00';
-  //     return `${startHour}:${startMinutes} PM - ${endHour}:${endMinutes} PM`;
-  //   } else {
-  //     // Late night slots (8 PM - 2 AM)
-  //     const adjustedHours = hours > 7 ? hours - 12 : hours;
-  //     const startHour = adjustedHours === 0 ? 12 : adjustedHours;
-  //     const startMinutes = half === 0 ? '00' : '30';
-  //     const endHour = half === 0 ? startHour : startHour + 1;
-  //     const endMinutes = half === 0 ? '30' : '00';
-  //     const startPeriod = hours >= 8 ? 'PM' : 'AM';
-  //     const endPeriod = (hours === 12 || hours + 1 > 7) ? 'AM' : 'PM';
-
-  //     return `${startHour}:${startMinutes} ${startPeriod} - ${endHour}:${endMinutes} ${endPeriod}`;
-  //   }
-  // };
-
+ 
 
   const convertSlotToTimeRange = (slot) => {
     let [hours, half] = slot.split('.').map(Number);
@@ -409,10 +302,6 @@ const ViewGround = () => {
             </div>
           </div>
         </div>
-
-
-
-
 
         {/* BookModal component */}
         <BookModal showModal={showModal} handleCloseModal={handleCloseModal} selectedSlots={selectedSlots} selectdate={formatDate(selectedDate)} />

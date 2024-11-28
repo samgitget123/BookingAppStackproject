@@ -10,31 +10,25 @@ const BookModal = ({ showModal, handleCloseModal, selectedSlots = []  , selectda
  const [info , setInfo] = useState('');
   const dispatch = useDispatch();
   const { bookingId, loading, error } = useSelector((state) => state.ground);
-  // const handleBooking = () => {
-  //   const bookingData = {
-  //     ground_id: gid,
-  //     date: selectdate,
-  //     slots: selectedSlots,
-  //     combopack: true,
-  //   };
 
-  //   dispatch(bookSlot(bookingData));
-  // };
-const handleBooking = async (gid , selectedSlots , selectdate ) => {
+ 
+
+const handleBooking = async (gid , selectedSlots , selectdate  ) => {
   const bookingData = {
     ground_id: gid,
     date: selectdate,
     slots: selectedSlots,
-   
+  
   };
 
   try {
-    const response = await fetch(`http://localhost:5000/book-slot`, {
+    const response = await fetch(`http://localhost:5000/api/booking/book-slot`, {
       method: 'POST', // Specify the method
       headers: {
         'Content-Type': 'application/json', // Specify content type
       },
       body: JSON.stringify(bookingData), // Send bookingData as JSON string
+      
     });
 
     // if (!response.ok) {
@@ -47,22 +41,14 @@ const handleBooking = async (gid , selectedSlots , selectdate ) => {
       setInfo(data.message);
     }
    
-    console.log('Bookingsuccessful:', data.message);
+    console.log('Bookingsuccessful:', data);
     
   } catch (error) {
     console.error('Error booking slot:', error);
   }
 };
 
-  // useEffect(() => {
-  //   if (bookingId) {
-  //     navigate(`/payment/${gid}`, { state: bookingId });
-  //   }
-  // }, [bookingId, navigate, gid]);
-  // const navigate = useNavigate();
-  // const gotopayment = () => {
-  //   navigate(`/payment/${bookingId}`, { state: bookingId });
-  // };
+ 
   useEffect(() => {
     if (showModal) {
       document.body.style.overflow = 'hidden'; // Disable scrolling when modal is open
@@ -140,7 +126,7 @@ const handleBooking = async (gid , selectedSlots , selectdate ) => {
                 Close
               </button>
               <button type="button" className="btn btn-primary"  onClick={()=>{
-                handleBooking(gid , selectedSlots , selectdate )
+                handleBooking(gid , selectedSlots , selectdate  )
               }}>
                 Confirm Booking
               </button>

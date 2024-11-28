@@ -73,53 +73,17 @@ const Herosection = () => {
   const handleAreaChange = (event) => {
     dispatch(selectArea(event.target.value));
   };
-  // const handleGetCurrentLocation = () => {
-  //   if (navigator.geolocation) {
-  //     navigator.geolocation.getCurrentPosition(async (position) => {
-  //       const { latitude, longitude } = position.coords;
-  //       try {
-  //         const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}&addressdetails=1`);
-  //         const data = await response.json();
 
-
-
-  //         // Extract city and area, handling cases where city might be missing
-  //         const city = data.address.city || data.address.town || data.address.village || data.address.hamlet || data.address.state || 'Unknown City';
-  //         const area = data.address.neighbourhood || data.address.suburb || data.address.road || data.address.footway || 'Unknown Area';
-
-
-  //         // Set city and area in state
-  //         dispatch(selectCity(city));
-  //         dispatch(selectArea(area));
-
-  //         // Optionally, trigger a fetch for playgrounds or related data based on the selected city
-  //         if (city && city !== 'Unknown City') {
-  //           dispatch(fetchPlaygrounds(city));
-  //         }
-
-  //       } catch (error) {
-  //         console.error('Error with reverse geocoding:', error);
-  //       }
-  //     }, (error) => {
-  //       console.error('Error getting location:', error);
-  //     });
-  //   } else {
-  //     console.error('Geolocation is not supported by this browser.');
-  //   }
-  // };
-
-  
-    
   return (
     <>
       <section className=' text-dark  primaryColor'>
         <div className="container-fluid">
           <div className=" d-sm-flex justify-content-evenly  my-3">
             <div className='row'>
-              <div className="col-lg-7 justify-content-center  ">
+              <div className="col-lg-8 justify-content-center  ">
                 <img className='img-fluid  w-80 mt-md-3 ' src={display} alt="image" />
               </div>
-              <div className="col-lg-5 secondaryColor">
+              <div className="col-lg-4 secondaryColor">
                 <div className='d-flex align-items-center justify-content-center text-center'>
                   <div className='mt-sm-5'>
                     <div className='mb-3 d-none d-sm-block mb-sm-5 '>

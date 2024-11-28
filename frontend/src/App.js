@@ -14,6 +14,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './App.css';
 
 const App = () => {
+  const base_url = process.env;
+  console.log(base_url,'base_url')
   return (
     <Provider store={store}>
       <Router>

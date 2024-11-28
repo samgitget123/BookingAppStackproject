@@ -25,7 +25,7 @@ const Showgrounds = ({ selectedCity }) => {
   if (error) {
     return <div>Error: {error}</div>;
   }
-
+  
   return (
     <div className="container-fluid cardsection">
       <div>

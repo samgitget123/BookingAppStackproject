@@ -182,7 +182,7 @@ const initialState = {
 export const fetchPlaygrounds = createAsyncThunk(
   'city/fetchPlaygrounds',
   async (location, thunkAPI) => {
-    const response = await fetch(`http://localhost:5000/grounds?location=${location}`);
+    const response = await fetch(`http://localhost:5000/api/ground?location=${location}`);
     console.log('API' , response)
     if (!response.ok) {
       throw new Error('Failed to fetch playgrounds');
