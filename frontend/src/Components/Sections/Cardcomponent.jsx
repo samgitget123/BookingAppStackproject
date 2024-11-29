@@ -1,6 +1,6 @@
 import React, { useState , useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import groundImage from '../../Images/crick_img.jpg'
+import groundImage from '../../Images/turf.jpeg'
 const CardComponent = ({ grounds }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage, setCardsPerPage] = useState(8); //
@@ -11,9 +11,11 @@ const CardComponent = ({ grounds }) => {
       if (window.matchMedia("(max-width: 768px)").matches) {
         // For mobile devices
         setCardsPerPage(4);
-      } else {
-        // For tablets and desktops
+      }else if (window.matchMedia("(min-width: 769px) and (max-width: 1028px)").matches){
         setCardsPerPage(8);
+      }else {
+        // For tablets and desktops
+        setCardsPerPage(12);
       }
     };
 
@@ -53,11 +55,11 @@ const CardComponent = ({ grounds }) => {
   };
 
   return (
-    <div className="container my-3">
-      <div className="row g-4">
+    <div className=" my-3">
+      <div className="row g-2">
         {currentCards && currentCards.length > 0 ? (
           currentCards.map((playground, index) => (
-            <div className="col-lg-3 col-md-6 col-sm-12" key={index}>
+            <div className="col-lg-2 col-md-6 col-sm-12" key={index}>
               <div className="card h-50 shadow-lg border-0 rounded" onClick={() => handleCardClick(playground.ground_id)}>
                 <img src={groundImage} className="card-img-top img-fluid groundImgsize" alt={playground.data.name} />
                 <div className="card-body secondaryColor"> 

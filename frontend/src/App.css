@@ -14,7 +14,8 @@
   --primary-font : #fff;
   --secondary-font : #000;
   --teritory-font : #fff;
-  --special-color : #00EE64 
+  --special-color : #00EE64;
+  --showcardsbgcolor: #F4F6FF;
 }
 
 
@@ -28,6 +29,19 @@ body {
 .sectionheight{
   height: 50vh!important;
 }
+.halfscreenrow {
+  height: 50vh; /* 50% of the viewport height */
+}
+.herosectioncontainer {
+  height: 80vh; /* Occupy 50% of the viewport height */
+}
+/*****Herosection carousel****/
+.carousel-item img {
+  height: 50%!important; /* Set your desired height */
+  object-fit: cover!important; /* Ensures the image fills the space without distortion */
+  width: 100%!important; /* Ensures the image spans the entire width */
+}
+
 .cardheadfont{
   font-size: 18px!important;
   color: var(--teritory-font)!important;
@@ -55,6 +69,7 @@ body {
   text-decoration: none;
   color : #000
 }
+
 /*********Modal css********/
 .modal-animate {
   opacity: 0;
@@ -123,9 +138,9 @@ body {
 .primaryColor{
   background-color: var(--secondary-color)!important;
 }
-/* .cardsection{
-  background-color: var(--teritary-color);
-} */
+.cardsection{
+  background-color: var(--showcardsbgcolor)!important;
+}
 .primaryFont{
   color: var(--primary-font);
   font-weight: 700;
@@ -201,8 +216,7 @@ span .secondaryFont{
   }
 }
 .groundImgsize{
-  width: 8rem;
-  height: 8rem;
+  height: 6rem!important;
 }
 .webheading{
   font-size: 42px!important;
@@ -231,6 +245,7 @@ span .secondaryFont{
     line-height: 32px;
   
   }
+ 
 }
 /* Desktop styles */
 @media (min-width: 992px) {
@@ -239,6 +254,9 @@ span .secondaryFont{
   }
   .ground-image {
       width: 80%;
+  }
+  .cardsection{
+    padding: 20px!important;
   }
   .webheading{
     font-size: 42px;
