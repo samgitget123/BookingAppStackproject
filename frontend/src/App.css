@@ -48,13 +48,15 @@ body {
   line-height: 22px!important;
 }
 .viewcardbg{
-  background-color: #CBD2A4!important;
+  background-color: var(--showcardsbgcolor)!important;
 }
 .herofont{
   font-size: 28px!important;
   color: var(--teritory-font)!important;
   line-height: 22px!important;
   font-weight: 12px!important;
+  margin: auto;
+  padding: 3px 0px;
 }
 .spanfont{
   font-size: 32px!important;
@@ -98,6 +100,30 @@ body {
 .modal-backdrop.show {
   opacity: 0.7;
 }
+.typing {
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0; /* Start with no width to show typing effect */
+  animation: typing 2s steps(16) forwards, blink 0.75s step-end infinite alternate; /* Adjust steps to match the number of characters in 'Ground' */
+}
+
+@keyframes typing {
+  from {
+    width: 0; /* Start with no width */
+  }
+  to {
+    width: 19ch; /* Final width to match the length of 'Ground' */
+  }
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent; /* Hide cursor at halfway point */
+  }
+}
+
+
+/************************************/
 /*********MEDIA QUERIES********/
 /* ViewGround.css */
 
@@ -216,17 +242,17 @@ span .secondaryFont{
   }
 }
 .groundImgsize{
-  height: 6rem!important;
+  height: 8rem!important;
 }
 .webheading{
-  font-size: 42px!important;
+  font-size: 32px!important;
   line-height: 42px!important;
   color: var(--primary-font)!important;
   text-align: center!important;
   color: var( --special-color)!important;
 }
 .webheading2{
-  font-size: 42px!important;
+  font-size: 32px!important;
   line-height: 42px!important;
   color: var(--primary-font)!important;
   text-align: center;
@@ -244,6 +270,9 @@ span .secondaryFont{
     font-size: 20px;
     line-height: 32px;
   
+  }
+  .groundImgsize{
+    height: 10rem!important;
   }
  
 }
