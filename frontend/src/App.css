@@ -196,7 +196,7 @@ span .secondaryFont{
 }
 .availablebtn{
   font-size: 10px!important;
-  width: 120px!important; /* Set to desired width */
+  width: 150px!important; /* Set to desired width */
   text-align: center!important;
   font-weight: 500!important;
 }

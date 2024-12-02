@@ -60,7 +60,8 @@ const ViewGround = () => {
 
   const fetchGroundDetailsWithDate = async (formattedDate) => {
     try {
-      const response = await axios.get(`http://localhost:5000/ground/${gid}?date=${formattedDate}`);
+      const response = await axios.get(`http://localhost:5000/api/ground/${gid}?date=${formattedDate}`);
+      //http://localhost:5000/api/ground/GND18NT79YDS?date=2024-12-25
       setBookings(response.data.slots.booked || []);
     } catch (error) {
       console.error('Error fetching ground details:', error);
@@ -97,7 +98,7 @@ const ViewGround = () => {
       };
 
       try {
-        const response = await axios.post('http://localhost:5000/book-slot', bookingData);
+        const response = await axios.post('http://localhost:5000/api/booking/book-slot', bookingData);
 
         if (response.status === 200) {
 
@@ -164,7 +165,7 @@ const ViewGround = () => {
   // Helper function to convert slot value to time range with AM/PM
   const availableSlots = allSlots.filter((slot) => !bookings.includes(slot)).map(formatSlot);
   const bookedslotsbydate = bookings.map(formatSlot);
-
+  console.log(bookedslotsbydate, 'bookedslotsbydate');
  
 
   const convertSlotToTimeRange = (slot) => {
@@ -242,9 +243,10 @@ const ViewGround = () => {
 
         <div className='d-flex text-center pt-3 '>
           <div className="row">
-            <div className="col-lg-8 col-sm-6">
-              <div className=" d-flex justify-content-center  secondaryColor">
-                <div className='col-lg-4'>
+            <div className="col-lg-8 col-sm-12 col-md-12 ">
+              <div className=" d-flex justify-content-evenly ">
+                <div className='col-lg-4 col-sm-6 col-md-6  '>
+                  <div className='secondaryColor card  shadow-lg border-0 g-1  rounded w-100 '>
                   <h6 className='teritoryFont text-light mt-3'>Available Slots:</h6>
                   <ul className="list-unstyled d-flex flex-wrap flex-column flex-sm-row">
                     {availableSlots.length > 0 ? (
@@ -262,8 +264,11 @@ const ViewGround = () => {
                       <li className='teritoryFont'>No available slots</li>
                     )}
                   </ul>
+                  </div>
+                  
                 </div>
-                <div className='col-lg-4 text-center'>
+                <div className='col-lg-4 col-sm-6 col-md-6 text-center secondaryColor '>
+                  <div className=' secondaryColor card shadow-lg border-0 g-1  rounded w-100'>
                   <h6 className='text-light mt-3'>Booked Slots:</h6>
                   <ul className="list-unstyled d-flex flex-wrap flex-column flex-sm-row">
                     {bookedslotsbydate.length > 0 ? (
@@ -283,11 +288,13 @@ const ViewGround = () => {
                     )}
                   </ul>
 
+                  </div>
+                 
                 </div>
               </div>
             </div>
             <div className="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-xlg-6 g-0  ">
-              <div className="card shadow-lg border-0 mt-3 w-80 rounded secondaryColor viewcardFont">
+              <div className="card shadow-lg border-0  w-80 rounded secondaryColor viewcardFont">
                 <div className='mobileconfirmnow  d-flex justify-content-center mt-3'>
                   <button variant="primary" className="btn btn-primary confirmbtn" onClick={confirnnowClick}>Confirm Now</button>
                 </div>

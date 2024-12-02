@@ -27,7 +27,7 @@ const groundSchema = new mongoose.Schema({
         type: Date, 
         default: Date.now 
     },
-    slots: { type: Map, of: { bookedSlots: [String] } }, // Store slots as an object
+    slots: { type: Map, of: { bookedSlots: [String], default: [] } }, // Store slots as an object
    
     
 }, { timestamps: true });

@@ -49,12 +49,13 @@ const bookingGround =  asyncHandler(async (req, res) => {
 
     // Ensure uniqueness of booked slots (optional, in case of any duplication)
     dateSlotEntry.bookedSlots = [...new Set(dateSlotEntry.bookedSlots)];
-
-    console.log("Updated Booked Slots: ", dateSlotEntry.bookedSlots);
-
-    // Save the updated ground document with booked slots
-    await ground.save();
-
+    if(dateSlotEntry.bookedSlots){
+      console.log("Updated Booked Slots: ", dateSlotEntry.bookedSlots);
+      ground.markModified('slots');
+      // Save the updated ground document with booked slots
+      await ground.save();
+    }
+  
     // Calculate total price based on slots and combo pack
     const pricePerSlot = 800 * 0.5; // Slot duration = 0.5 hours
     const totalPrice = slots.length * pricePerSlot + (comboPack ? 80 : 0);
