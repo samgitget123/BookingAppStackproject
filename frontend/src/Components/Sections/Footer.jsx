@@ -1,14 +1,15 @@
 import React from 'react'
 import {Container , Row , Col} from 'react-bootstrap';
 const Footer = () => {
-    const currentYear = new Date().getFullYear;
-    console.log('year : ' , currentYear);
+    const currentYear = new Date().getFullYear();
+
+
   return (
-   <footer>
+   <footer className='bg-dark'>
         <Container>
             <Row>
                 <Col className='text-center py-3'>
-                    <p>Book My Ground &copy; {new Date().getFullYear}</p>
+                    <p className='text-light'>Book My Ground &copy; {currentYear}</p>
                 </Col>
             </Row>
         </Container>

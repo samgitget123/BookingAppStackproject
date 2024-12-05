@@ -26,6 +26,30 @@ body {
   line-height: 1.5;
   font-weight: 400;
 }
+/* App container: Flexbox layout for consistent header, main, and footer placement */
+.app-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Full height of the viewport */
+}
+
+/* Main content should expand to fill the remaining space */
+.app-main {
+  flex: 1; /* Takes the available space between header and footer */
+  padding: 20px; /* Optional padding for spacing */
+  background-color: #fff; /* Optional background color */
+}
+
+/******Basics*********/
+.nobookedslots{
+  margin: auto;
+  font-weight: 500;
+  padding: 4px 8px;
+  border: 1px solid white;
+  background-color: #fff;
+  border-radius: 10px;
+}
+/***********************/
 .sectionheight{
   height: 50vh!important;
 }
@@ -211,6 +235,7 @@ span .secondaryFont{
   .mobileconfirmnow{
     display: none!important;
   }
+ 
   body{
     font-size: 16px;
     line-height: 1.6;
@@ -263,6 +288,9 @@ span .secondaryFont{
     font-size: 42px!important;
     line-height: 42px!important;
     color: var(--primary-font)!important;
+  }
+  .slotboxes{
+    width: 200px!important;
   }
   .primaryFont{
     color: var(--primary-font);

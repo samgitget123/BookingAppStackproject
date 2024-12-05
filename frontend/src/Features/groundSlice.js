@@ -15,7 +15,7 @@ export const fetchGroundDetails = createAsyncThunk(
   async (gid, thunkAPI) => {
     try {
       const response = await axios.get(`http://localhost:5000/api/ground/${gid}`);
-      console.log('API Response:', response); // Log the response
+    
       return response.data;
     } catch (error) {
       console.error('API Error:', error); // Log the error
@@ -28,10 +28,10 @@ export const fetchGroundDetails = createAsyncThunk(
 export const bookSlot = createAsyncThunk(
   'ground/bookSlot',
   async (bookingData, thunkAPI) => {
-    console.log(bookingData,'bookingData')
+   
     try {
       const response = await axios.post('http://localhost:5000/api/booking/book-slot', bookingData);
-      console.log('Booking Response:', response); // Log the booking response
+    
       return response.data;
     } catch (error) {
       console.error('Booking Error:', error); // Log the error

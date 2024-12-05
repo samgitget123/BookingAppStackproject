@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/static/css/main.a9e1be3b.css",
+    "main.js": "/static/js/main.cbd71ab3.js",
+    "static/js/453.d855a71b.chunk.js": "/static/js/453.d855a71b.chunk.js",
+    "static/media/turf.jpeg": "/static/media/turf.e17cc13eb051acce2607.jpeg",
+    "static/media/brandlogonobg.png": "/static/media/brandlogonobg.f85299735523774f83dc.png",
+    "static/media/crickbanner.jpg": "/static/media/crickbanner.b8cb2f1843cf0ab6e616.jpg",
+    "static/media/banner.jpg": "/static/media/banner.d1938df8a0726d7f2f4c.jpg",
+    "static/media/bgcrick.jpg": "/static/media/bgcrick.40a962dd0ca12590f806.jpg",
+    "index.html": "/index.html",
+    "main.a9e1be3b.css.map": "/static/css/main.a9e1be3b.css.map",
+    "main.cbd71ab3.js.map": "/static/js/main.cbd71ab3.js.map",
+    "453.d855a71b.chunk.js.map": "/static/js/453.d855a71b.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a9e1be3b.css",
+    "static/js/main.cbd71ab3.js"
+  ]
+}

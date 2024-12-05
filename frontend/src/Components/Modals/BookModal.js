@@ -41,7 +41,7 @@ const handleBooking = async (gid , selectedSlots , selectdate  ) => {
       setInfo(data.message);
     }
    
-    console.log('Bookingsuccessful:', data);
+   
     
   } catch (error) {
     console.error('Error booking slot:', error);

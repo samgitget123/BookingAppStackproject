@@ -19,7 +19,7 @@ const Getlocations = ({ onCityFetched }) => {
     getCityFromCoordinates(latitude, longitude);
   };
 
-  console.log("userlatlong", location.latitude, location.longitude);
+ 
   const handleError = (error) => {
     if (error.code === error.PERMISSION_DENIED) {
       alert(
@@ -29,7 +29,7 @@ const Getlocations = ({ onCityFetched }) => {
       setErrorApi(error.message);
     }
   };
-  console.log("Error", errorApi);
+ 
   const getCityFromCoordinates = async (latitude, longitude) => {
     try {
       // Using OpenStreetMap's Nominatim API for reverse geocoding
@@ -42,11 +42,11 @@ const Getlocations = ({ onCityFetched }) => {
         response.data.address.town ||
         response.data.address.village;
       const locationcity = response.data;
-      console.log(city, 'city from the geolocation')
+     
       if (city) {
         onCityFetched(city); // Pass the fetched city to the parent component
       }
-      console.log("uselocationcity", locationcity);
+     
       dispatch(fetchPlaygrounds(city));
       setCity(city);
      

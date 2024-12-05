@@ -12,21 +12,24 @@ import store from './Store';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 // CSS
 import './App.css';
-
+import Footer from './Components/Sections/Footer';
 const App = () => {
   const base_url = process.env;
   console.log(base_url,'base_url')
   return (
     <Provider store={store}>
       <Router>
+        <div className="app-container">
         <Header /> {/* Placed outside of <main> so that header appears on all pages */}
-        <main>
+        <main className="app-main">
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/viewground/:gid" element={<ViewGround />} />
               <Route path="/payment/:gid" element={<Payment />} />
             </Routes>
         </main>
+        <Footer/>
+        </div>
       </Router>
     </Provider>
   );
