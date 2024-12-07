@@ -182,7 +182,7 @@ const initialState = {
 export const fetchPlaygrounds = createAsyncThunk(
   'city/fetchPlaygrounds',
   async (location, thunkAPI) => {
-    const response = await fetch(`http://localhost:5000/api/ground?location=${location}`);
+    const response = await fetch(`https://bookingapp-r0fo.onrender.com/api/ground?location=${location}`);
   
     if (!response.ok) {
       throw new Error('Failed to fetch playgrounds');
