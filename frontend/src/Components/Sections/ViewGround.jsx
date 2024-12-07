@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGroundDetails } from "../../Features/groundSlice";
@@ -9,6 +8,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 //Modal
 import BookModal from "../Modals/BookModal";
+//base url
+import endpoints from "../../shared/endpoints";
+const API_BASE_URL = endpoints.API_BASE_URL;
 // Helper function to format slot times
 const formatSlot = (slot) => {
   const [hours, minutes] = slot.split(".").map(Number);
@@ -64,7 +66,7 @@ const ViewGround = () => {
   const fetchGroundDetailsWithDate = async (formattedDate) => {
     try {
       const response = await axios.get(
-        `http://localhost:5000/api/ground/${gid}?date=${formattedDate}`
+        `${API_BASE_URL}/api/ground/${gid}?date=${formattedDate}`
       );
       //http://localhost:5000/api/ground/GND18NT79YDS?date=2024-12-25
       setBookings(response.data.slots.booked || []);
@@ -103,7 +105,7 @@ const ViewGround = () => {
 
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/booking/book-slot",
+          `${API_BASE_URL}/api/booking/book-slot`,
           bookingData
         );
 

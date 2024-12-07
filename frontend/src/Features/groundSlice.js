@@ -1,8 +1,8 @@
 // src/redux/groundSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-
-// Initial state for the ground slice
+import endpoints from '../shared/endpoints.js';
+const API_BASE_URL = endpoints.API_BASE_URL;
 const initialState = {
   ground: null,
   loading: false,
@@ -14,7 +14,7 @@ export const fetchGroundDetails = createAsyncThunk(
   'ground/fetchGroundDetails',
   async (gid, thunkAPI) => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/ground/${gid}`);
+      const response = await axios.get(`${API_BASE_URL}/api/ground/${gid}`);
     
       return response.data;
     } catch (error) {
@@ -30,7 +30,7 @@ export const bookSlot = createAsyncThunk(
   async (bookingData, thunkAPI) => {
    
     try {
-      const response = await axios.post('http://localhost:5000/api/booking/book-slot', bookingData);
+      const response = await axios.post(`${API_BASE_URL}/api/booking/book-slot`, bookingData);
     
       return response.data;
     } catch (error) {
