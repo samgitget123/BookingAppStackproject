@@ -11,7 +11,8 @@ const BookModal = ({ showModal, handleCloseModal, selectedSlots = []  , selectda
   const dispatch = useDispatch();
   const { bookingId, loading, error } = useSelector((state) => state.ground);
 
- 
+  //const API_BASE_URL = `http://localhost:5000`;
+  const API_BASE_URL = `https://bookingapp-r0fo.onrender.com`;
 
 const handleBooking = async (gid , selectedSlots , selectdate  ) => {
   const bookingData = {
@@ -22,7 +23,7 @@ const handleBooking = async (gid , selectedSlots , selectdate  ) => {
   };
 
   try {
-    const response = await fetch(`http://localhost:5000/api/booking/book-slot`, {
+    const response = await fetch(`${API_BASE_URL}/api/booking/book-slot`, {
       method: 'POST', // Specify the method
       headers: {
         'Content-Type': 'application/json', // Specify content type
@@ -125,8 +126,9 @@ const handleBooking = async (gid , selectedSlots , selectdate  ) => {
               >
                 Close
               </button>
-              <button type="button" className="btn btn-primary"  onClick={()=>{
+              <button type="button" className="btn btn-primary"   disabled={selectedSlots.length === 0}  onClick={()=>{
                 handleBooking(gid , selectedSlots , selectdate  )
+              
               }}>
                 Confirm Booking
               </button>
