@@ -1,20 +1,21 @@
 {
   "files": {
-    "main.css": "/static/css/main.a9e1be3b.css",
-    "main.js": "/static/js/main.e83890c4.js",
+    "main.css": "/static/css/main.2248eef1.css",
+    "main.js": "/static/js/main.6ba8fdc1.js",
     "static/js/453.d855a71b.chunk.js": "/static/js/453.d855a71b.chunk.js",
     "static/media/turf.jpeg": "/static/media/turf.e17cc13eb051acce2607.jpeg",
     "static/media/brandlogonobg.png": "/static/media/brandlogonobg.f85299735523774f83dc.png",
-    "static/media/crickbanner.jpg": "/static/media/crickbanner.b8cb2f1843cf0ab6e616.jpg",
-    "static/media/banner.jpg": "/static/media/banner.d1938df8a0726d7f2f4c.jpg",
-    "static/media/bgcrick.jpg": "/static/media/bgcrick.40a962dd0ca12590f806.jpg",
+    "static/media/crickbanner.jpg": "/static/media/crickbanner.1e84aed7f844de505f38.jpg",
+    "static/media/banner.jpg": "/static/media/banner.2aa4e20b3298670971ad.jpg",
+    "static/media/bgcrick.jpg": "/static/media/bgcrick.2ea4363ffd051e179470.jpg",
+    "static/media/loader.gif": "/static/media/loader.42aaa181adb3af3bef08.gif",
     "index.html": "/index.html",
-    "main.a9e1be3b.css.map": "/static/css/main.a9e1be3b.css.map",
-    "main.e83890c4.js.map": "/static/js/main.e83890c4.js.map",
+    "main.2248eef1.css.map": "/static/css/main.2248eef1.css.map",
+    "main.6ba8fdc1.js.map": "/static/js/main.6ba8fdc1.js.map",
     "453.d855a71b.chunk.js.map": "/static/js/453.d855a71b.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.a9e1be3b.css",
-    "static/js/main.e83890c4.js"
+    "static/css/main.2248eef1.css",
+    "static/js/main.6ba8fdc1.js"
   ]
 }

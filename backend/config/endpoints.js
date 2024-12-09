@@ -1,13 +1,13 @@
+// config.js
 const endpoints = {
-  development: {
-    API_BASE_URL: "https://bookingapp-r0fo.onrender.com",  //https://bookingapp-r0fo.onrender.com/
-  },
-  production: {
-    API_BASE_URL: "http://localhost:5000",  // Production endpoint
-  },
+  production: "https://bookingapp-r0fo.onrender.com",  // Development endpoint
+  development: "http://localhost:5000",                // Production endpoint
 };
 
-const ENV = process.env.NODE_ENV || "production"; // Default to production
+const ENV = process.env.NODE_ENV || "development"; // Default to production
+const API_BASE_URL = endpoints[ENV]; // Dynamically choose based on environment
+
 console.log("Using environment:", ENV);
-console.log("API Base URL:", endpoints[ENV].API_BASE_URL);
-export default endpoints[ENV];
+console.log("API Base URL:", API_BASE_URL);
+
+export default API_BASE_URL;

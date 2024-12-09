@@ -1,5 +1,5 @@
 // Herosection.js
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   selectCity,
@@ -17,25 +17,32 @@ const Herosection = () => {
     (state) => state.city
   );
   const [city, setCity] = useState("");
-
+  const [isGetLocationDisabled, setIsGetLocationDisabled] = useState(false);
   //it has taken from the use current location as  a prop from Getlocations component
   const handleCityFetched = (fetchedCity) => {
     setCity(fetchedCity); // Update local city state
     dispatch(selectCity(fetchedCity)); // Dispatch to Redux store
     dispatch(fetchPlaygrounds(fetchedCity)); // Fetch playgrounds for the city
+    setIsGetLocationDisabled(true);
   };
   const handleCityChange = (event) => {
     const city = event.target.value;
     dispatch(selectCity(city));
     if (city) {
       dispatch(fetchPlaygrounds(city)); // Fetch data when city is selected
+      setIsGetLocationDisabled(true); // Disable Get Location button
     }
   };
 
   const handleAreaChange = (event) => {
     dispatch(selectArea(event.target.value));
   };
-
+  // Re-enable Get Location button if city state is cleared
+  useEffect(() => {
+    if (!selectedCity) {
+      setIsGetLocationDisabled(false);
+    }
+  }, [selectedCity]);
   return (
     <>
       <section className=" text-dark  primaryColor ">
@@ -51,7 +58,7 @@ const Herosection = () => {
                   <div className="mt-sm-5">
                     <div className="mb-3 d-none d-sm-block mb-sm-5 ">
                       <img
-                        className="img-fluid w-50 rotateImage"
+                        className="img-fluid rotateImage"
                         src={brandlogo}
                         alt="logo"
                       />
@@ -88,7 +95,7 @@ const Herosection = () => {
                       </select>
                     </form>
                     <div>
-                     <Getlocations  onCityFetched={handleCityFetched}/>
+                     <Getlocations  onCityFetched={handleCityFetched} disabled={isGetLocationDisabled}/>
                     </div>
                     <div>
                       <h4 className="webheading">

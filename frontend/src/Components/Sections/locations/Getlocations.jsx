@@ -2,7 +2,7 @@ import React, { useState, useEffect  } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import { fetchPlaygrounds } from "../../../Features/citySlice";
-const Getlocations = ({ onCityFetched }) => {
+const Getlocations = ({ onCityFetched, disabled }) => {
     const dispatch = useDispatch();
   const [location, setLocation] = useState({
     latitude: null,
@@ -68,7 +68,7 @@ const Getlocations = ({ onCityFetched }) => {
   }, []);
   return (
     <>
-      <button className="btn btn-primary my-3 " onClick={requestLocationAccess}>
+      <button className="btn btn-primary my-3 " onClick={requestLocationAccess}  disabled={disabled}>
         Use Current Location
       </button>
     </>

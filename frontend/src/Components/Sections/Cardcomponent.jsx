@@ -1,9 +1,11 @@
 import React, { useState , useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import groundImage from '../../Images/turf.jpeg'
+import loaderGif from '../../Images/loader.gif'
 const CardComponent = ({ grounds }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage, setCardsPerPage] = useState(8); //
+  const [loading, setLoading] = useState(true); 
   //const cardsPerPage = 8;
   // Check screen size and adjust cardsPerPage based on device
   useEffect(() => {
@@ -28,6 +30,15 @@ const CardComponent = ({ grounds }) => {
     // Clean up event listener on unmount
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+
+  useEffect(() => {
+    // Simulate a loading delay
+    const timer = setTimeout(() => {
+      setLoading(false); // Hide loader after loading is complete
+    }, 1000); // Adjust the timeout as needed
+
+    return () => clearTimeout(timer); // Cleanup timeout
+  }, [grounds]);
 
   // Calculate the total number of pages
   const totalPages = Math.ceil(grounds.length / cardsPerPage);
@@ -56,7 +67,10 @@ const CardComponent = ({ grounds }) => {
 
   return (
     <div className=" my-3">
-      <div className="row g-2">
+       {loading ? (
+        <div className="d-flex justify-content-center align-items-center" style={{ height: '300px' }}>
+          <img src={loaderGif} alt="Loading..." className="img-fluid loadergifimage"  />
+        </div>): (<div className="row g-2">
         {currentCards && currentCards.length > 0 ? (
           currentCards.map((playground, index) => (
             <div className="col-lg-2 col-md-6 col-sm-12" key={index}>
@@ -76,7 +90,8 @@ const CardComponent = ({ grounds }) => {
             <p>No playgrounds available for the selected city or query.</p>
           </div>
         )}
-      </div>
+      </div>)}
+      
 
       {/* Pagination Buttons */}
       {currentCards.length > 0 ? (

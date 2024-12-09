@@ -6,7 +6,7 @@ import connectDB from './config/db.js';
 //const groundRoutes = require('./routes/groundRoutes'); 
 import groundRoutes from './routes/groundRoutes.js';
 import Booking from './routes/bookingRoutes.js';
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 5001;
 import { notfound , errorHandler } from './middleware/errorMiddleware.js';
 //import TestData from './Data/TestData.js';
 // Import path and define __dirname for ES modules

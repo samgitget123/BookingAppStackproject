@@ -1,8 +1,9 @@
 // src/redux/groundSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
-import endpoints from '../shared/endpoints.js';
-const API_BASE_URL = endpoints.API_BASE_URL;
+
+//const API_BASE_URL = `http://localhost:5000`;
+const API_BASE_URL = `https://bookingapp-r0fo.onrender.com`;
 const initialState = {
   ground: null,
   loading: false,

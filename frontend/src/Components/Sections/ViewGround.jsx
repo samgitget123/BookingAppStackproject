@@ -9,8 +9,9 @@ import "react-datepicker/dist/react-datepicker.css";
 //Modal
 import BookModal from "../Modals/BookModal";
 //base url
-import endpoints from "../../shared/endpoints";
-const API_BASE_URL = endpoints.API_BASE_URL;
+
+//const API_BASE_URL = `http://localhost:5000`;
+const API_BASE_URL = `https://bookingapp-r0fo.onrender.com`;
 // Helper function to format slot times
 const formatSlot = (slot) => {
   const [hours, minutes] = slot.split(".").map(Number);
@@ -124,7 +125,6 @@ const ViewGround = () => {
   };
 
   const handleSlotClick = (slot) => {
-   
     if (selectedSlots.includes(slot)) {
       setSelectedSlots(selectedSlots.filter((s) => s !== slot));
     } else {
@@ -199,7 +199,6 @@ const ViewGround = () => {
     .filter((slot) => !bookings.includes(slot))
     .map(formatSlot);
   const bookedslotsbydate = bookings.map(formatSlot);
- 
 
   const convertSlotToTimeRange = (slot) => {
     let [hours, half] = slot.split(".").map(Number);
@@ -245,30 +244,32 @@ const ViewGround = () => {
   };
   return (
     <section>
-      <div className="container">
-        <div className="row">
-          <div className="col-lg-8 col-md-12 col-sm-12">
-            <div>
-              <DatePicker
-                className="w-100"
-                selected={selectedDate}
-                onChange={(date) => {
-                  if (date) {
-                    setSelectedDate(date);
-                    fetchGroundDetailsWithDate(formatDate(date));
-                  }
-                }}
-                dateFormat="MMMM d, yyyy"
-                className="form-control"
-              />
+      <div className="selectdatesection">
+        <div className="container">
+          <div className="row">
+            <div className="col-lg-8 col-md-12 col-sm-12">
+              <div>
+                <DatePicker
+                  className="w-100"
+                  selected={selectedDate}
+                  onChange={(date) => {
+                    if (date) {
+                      setSelectedDate(date);
+                      fetchGroundDetailsWithDate(formatDate(date));
+                    }
+                  }}
+                  dateFormat="MMMM d, yyyy"
+                  className="form-control"
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <div>
-          <p>
-            <strong>Selected Date: </strong>
-            {formatDate(selectedDate)}
-          </p>
+          <div>
+            <p>
+              <strong>Selected Date: </strong>
+              {formatDate(selectedDate)}
+            </p>
+          </div>
         </div>
       </div>
       <div className="container-fluid viewcardbg pt-3">
@@ -278,6 +279,7 @@ const ViewGround = () => {
             variant="primary"
             className="btn btn-primary confirmbtn"
             onClick={confirnnowClick}
+            disabled={selectedSlots.length === 0} 
           >
             Confirm Now
           </button>

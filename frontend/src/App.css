@@ -36,10 +36,13 @@ body {
 /* Main content should expand to fill the remaining space */
 .app-main {
   flex: 1; /* Takes the available space between header and footer */
-  padding: 20px; /* Optional padding for spacing */
+  padding: 0px; /* Optional padding for spacing */
   background-color: #fff; /* Optional background color */
 }
-
+.loadergifimage{
+  width: 50px;
+  height: 50px;
+}
 /******Basics*********/
 .nobookedslots{
   margin: auto;
@@ -130,7 +133,10 @@ body {
   width: 0; /* Start with no width to show typing effect */
   animation: typing 2s steps(16) forwards, blink 0.75s step-end infinite alternate; /* Adjust steps to match the number of characters in 'Ground' */
 }
-
+/******Viewgrounds*********/
+.selectdatesection{
+  padding: 10px 0px 0px 10px;
+}
 @keyframes typing {
   from {
     width: 0; /* Start with no width */
@@ -177,8 +183,8 @@ body {
 }
 .rotateImage{
   animation: rotate 20s infinite linear; /* 5 seconds for full rotation, infinitely repeating */
-  width: 250px; /* Adjust width as needed */
-  height: auto; /* Maintain aspect ratio */
+  width: 300px; /* Adjust width as needed */
+  height: 250px; /* Maintain aspect ratio */
 }
 
 /*****colors****  ***/
@@ -217,6 +223,13 @@ span .secondaryFont{
   overflow: hidden;    /* Hide the overflowed text */
   text-overflow: ellipsis; /* Add the ellipsis (...) */
   max-width: 100%;     /* Set a maximum width for the element */
+  font-size: 1.5rem; /* Default size for desktop */
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+.card-text {
+  font-size: 1rem; /* Default size for desktop */
+  color: #666;
 }
 .availablebtn{
   font-size: 10px!important;
@@ -229,7 +242,17 @@ span .secondaryFont{
   
 }
 
+/*small mobiles***/
+@media (max-width: 480px) {
+  /* For small mobile devices */
+  .card-title {
+    font-size: 1rem; /* Smallest size for small screens */
+  }
 
+  .card-text {
+    font-size: 0.8rem;
+  }
+}
 /* Tablet styles */
 @media (min-width: 768px) {
   .mobileconfirmnow{
@@ -288,6 +311,13 @@ span .secondaryFont{
     font-size: 42px!important;
     line-height: 42px!important;
     color: var(--primary-font)!important;
+  }
+  .card-title {
+    font-size: 1.25rem; /* Slightly smaller for smaller screens */
+  }
+
+  .card-text {
+    font-size: 0.9rem;
   }
   .slotboxes{
     width: 200px!important;
