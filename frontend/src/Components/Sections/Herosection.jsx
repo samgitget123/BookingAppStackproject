@@ -95,7 +95,7 @@ const Herosection = () => {
                       </select>
                     </form>
                     <div>
-                     <Getlocations  onCityFetched={handleCityFetched} disabled={isGetLocationDisabled}/>
+                   <Getlocations  onCityFetched={handleCityFetched} disabled={isGetLocationDisabled}/>
                     </div>
                     <div>
                       <h4 className="webheading">

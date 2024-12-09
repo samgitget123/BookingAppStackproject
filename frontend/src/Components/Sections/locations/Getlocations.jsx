@@ -68,7 +68,7 @@ const Getlocations = ({ onCityFetched, disabled }) => {
   }, []);
   return (
     <>
-      <button className="btn btn-primary my-3 " onClick={requestLocationAccess}  disabled={disabled}>
+      <button className="btn btn-sm btn-primary my-3 " onClick={requestLocationAccess}  disabled={disabled}>
         Use Current Location
       </button>
     </>
