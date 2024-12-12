@@ -6,6 +6,7 @@ import groundImage from "../../Images/turf.jpeg";
 import axios from "axios";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import loaderGif from "../../Images/loader.gif";
 //Modal
 import BookModal from "../Modals/BookModal";
 //base url
@@ -132,7 +133,17 @@ const ViewGround = () => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return  <div
+  className="d-flex justify-content-center align-items-center"
+  style={{ height: "300px" }}
+>
+  <img
+    src={loaderGif}
+    alt="Loading..."
+    className="img-fluid loadergifimage"
+  />
+</div>;
+
   if (error) return <div>Error: {error}</div>;
   if (!ground) return <div>No ground data available</div>;
 
@@ -333,7 +344,7 @@ const ViewGround = () => {
                         </li>
                       ))
                     ) : (
-                      <li className="text-danger nobookedslots">
+                      <li className="text-danger nobookedslots m-1">
                         No booked slots
                       </li>
                     )}

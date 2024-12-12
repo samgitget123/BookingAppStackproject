@@ -10,6 +10,7 @@ import brandlogo from "../../Images/brandlogonobg.png";
 import Carousels from "./promotions/Carousels";
 import Getlocations from "./locations/Getlocations";
 import TypingText from "./animations/Typingtext";
+
 //import { useState } from 'react';
 const Herosection = () => {
   const dispatch = useDispatch();
@@ -43,17 +44,18 @@ const Herosection = () => {
       setIsGetLocationDisabled(false);
     }
   }, [selectedCity]);
+ 
   return (
     <>
       <section className=" text-dark  primaryColor ">
         <div className="container-fluid">
           <div className=" d-sm-flex justify-content-evenly ">
             <div className="row">
-              <div className="col-lg-8">
+              <div className="col-lg-8" >
                <Carousels/>
               </div>
 
-              <div className="col-lg-4 secondaryColor">
+              <div className="col-lg-4 secondaryColor" style={{borderRadius: "0px 0px 40px 40px"}}>
                 <div className="d-flex align-items-center justify-content-center text-center">
                   <div className="mt-sm-5">
                     <div className="mb-3 d-none d-sm-block mb-sm-5 ">

@@ -1,69 +1,67 @@
-
 // export default BookModal;
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useParams, useNavigate } from 'react-router-dom';
-import { bookSlot } from '../../Features/groundSlice';
-const BookModal = ({ showModal, handleCloseModal, selectedSlots = []  , selectdate}) => {
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { useParams, useNavigate } from "react-router-dom";
+import { bookSlot } from "../../Features/groundSlice";
+const BookModal = ({
+  showModal,
+  handleCloseModal,
+  selectedSlots = [],
+  selectdate,
+}) => {
   const { gid } = useParams();
   const navigate = useNavigate();
- const [info , setInfo] = useState('');
+  const [info, setInfo] = useState("");
   const dispatch = useDispatch();
   const { bookingId, loading, error } = useSelector((state) => state.ground);
 
   const API_BASE_URL = `http://localhost:5000`;
   //const API_BASE_URL = `https://bookingapp-r0fo.onrender.com`;
 
-const handleBooking = async (gid , selectedSlots , selectdate  ) => {
-  const bookingData = {
-    ground_id: gid,
-    date: selectdate,
-    slots: selectedSlots,
-  
+  const handleBooking = async (gid, selectedSlots, selectdate) => {
+    const bookingData = {
+      ground_id: gid,
+      date: selectdate,
+      slots: selectedSlots,
+    };
+
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/booking/book-slot`, {
+        method: "POST", // Specify the method
+        headers: {
+          "Content-Type": "application/json", // Specify content type
+        },
+        body: JSON.stringify(bookingData), // Send bookingData as JSON string
+      });
+
+      // if (!response.ok) {
+      //   throw new Error('Failed to book slot');
+      // }
+
+      const data = await response.json();
+      navigate(`/payment/${gid}`, { state: data });
+      if (data) {
+        setInfo(data.message);
+      }
+    } catch (error) {
+      console.error("Error booking slot:", error);
+    }
   };
 
-  try {
-    const response = await fetch(`${API_BASE_URL}/api/booking/book-slot`, {
-      method: 'POST', // Specify the method
-      headers: {
-        'Content-Type': 'application/json', // Specify content type
-      },
-      body: JSON.stringify(bookingData), // Send bookingData as JSON string
-      
-    });
-
-    // if (!response.ok) {
-    //   throw new Error('Failed to book slot');
-    // }
-
-    const data = await response.json();
-    navigate(`/payment/${gid}`, { state: data });
-    if(data){
-      setInfo(data.message);
-    }
-   
-   
-    
-  } catch (error) {
-    console.error('Error booking slot:', error);
-  }
-};
-
- 
   useEffect(() => {
     if (showModal) {
-      document.body.style.overflow = 'hidden'; // Disable scrolling when modal is open
+      document.body.style.overflow = "hidden"; // Disable scrolling when modal is open
     } else {
-      document.body.style.overflow = 'auto'; // Re-enable scrolling when modal is closed
+      document.body.style.overflow = "auto"; // Re-enable scrolling when modal is closed
     }
   }, [showModal]);
   // Function to format a single slot
   const formatslot = (selectedSlots) => {
-    if (!Array.isArray(selectedSlots) || selectedSlots.length === 0) return ''; // Ensure selectedSlots is a valid array
+    if (!Array.isArray(selectedSlots) || selectedSlots.length === 0) return ""; // Ensure selectedSlots is a valid array
 
     // Function to format time from 24-hour to 12-hour with AM/PM
     const formatTime = (hours, minutes) => {
-      const period = hours >= 12 ? 'PM' : 'AM';
+      const period = hours >= 12 ? "PM" : "AM";
       const formattedHours = hours % 12 === 0 ? 12 : hours % 12;
       return `${formattedHours}:${minutes} ${period}`;
     };
@@ -73,13 +71,16 @@ const handleBooking = async (gid , selectedSlots , selectdate  ) => {
     const lastSlot = selectedSlots[selectedSlots.length - 1];
 
     // Get start time from the first slot
-    const [startHours, startHalf] = firstSlot.split('.').map(Number);
-    const startMinutes = startHalf === 0 ? '00' : '30';
+    const [startHours, startHalf] = firstSlot.split(".").map(Number);
+    const startMinutes = startHalf === 0 ? "00" : "30";
     const startTime = formatTime(startHours, startMinutes);
 
     // Get end time from the last slot (end 30 minutes after the last slot)
-    const [endHours, endHalf] = lastSlot.split('.').map(Number);
-    const endTime = formatTime(endHours + (endHalf === 0 ? 0 : 1), endHalf === 0 ? '30' : '00');
+    const [endHours, endHalf] = lastSlot.split(".").map(Number);
+    const endTime = formatTime(
+      endHours + (endHalf === 0 ? 0 : 1),
+      endHalf === 0 ? "30" : "00"
+    );
 
     // Return the formatted time range as one value
     return `${startTime} - ${endTime}`;
@@ -89,47 +90,56 @@ const handleBooking = async (gid , selectedSlots , selectdate  ) => {
     <>
       {/* Conditionally apply Bootstrap classes based on showModal */}
       <div
-        className={`modal fade ${showModal ? 'show modal-animate' : ''}`}
+        className={`modal fade ${showModal ? "show modal-animate" : ""}`}
         tabIndex="-1"
         aria-labelledby="exampleModalLabel"
         aria-hidden={!showModal}
-        style={{ display: showModal ? 'block' : 'none' }}
+        style={{ display: showModal ? "block" : "none" }}
       >
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
+        <div className="modal-dialog modal-dialog-centered modal-lg">
+          <div className="modal-content shadow-lg rounded-3">
+            <div className="modal-header  text-white" style={{backgroundColor: "#006849"}}>
               <h5 className="modal-title" id="exampleModalLabel">
                 Booking Confirmation
               </h5>
               <button
                 type="button"
                 className="btn-close"
+                aria-label="Close"
                 onClick={handleCloseModal}
               ></button>
             </div>
-            <div className="modal-body">
-              <p>Your booking details:</p>
-              {selectedSlots.length > 0 ? (
-                <p>{formatslot(selectedSlots)}</p> // Call formatslot with the entire selectedSlots array
-              ) : (
-                <p>No slots selected.</p>
-              )}
-              <p>Please confirm your selection.</p>
-              <span>{info}</span>
+            <div className="modal-body text-center">
+              <h6 className="mb-3">Your Selected Slots</h6>
+              <div className="alert alert-info py-2">
+                {selectedSlots.length > 0 ? (
+                  <span>{formatslot(selectedSlots)}</span>
+                ) : (
+                  <span>No slots selected.</span>
+                )}
+              </div>
+              <div className="my-3">
+                <strong>Date:</strong> {selectdate}
+              </div>
+              {info && <div className="alert alert-success">{info}</div>}
+              <p className="text-muted">
+                Please review the details before confirming.
+              </p>
             </div>
-            <div className="modal-footer">
-              
-              <button
+            <div className="modal-footer justify-content-between">
+            <button
                 type="button"
                 className="btn btn-secondary"
                 onClick={handleCloseModal}
               >
                 Close
               </button>
-              <button type="button" className="btn btn-primary"   disabled={selectedSlots.length === 0}  onClick={()=>{
-                handleBooking(gid , selectedSlots , selectdate  )
-              
-              }}>
+              <button
+                type="button"
+                className="btn btn-primary"
+                disabled={selectedSlots.length === 0}
+                onClick={() => handleBooking(gid, selectedSlots, selectdate)}
+              >
                 Confirm Booking
               </button>
             </div>

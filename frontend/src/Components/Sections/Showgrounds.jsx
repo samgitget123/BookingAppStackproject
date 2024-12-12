@@ -12,15 +12,14 @@ const Showgrounds = ({ selectedCity }) => {
   const dispatch = useDispatch();
 
   const { filteredPlaygrounds, loading, error } = useSelector((state) => state.city || {});
+
   useEffect(() => {
     if (selectedCity) {
       dispatch(fetchPlaygrounds(selectedCity)); // Fetch playgrounds based on the selected city
     }
   }, [dispatch, selectedCity]);
 
-  if (loading) {
-    return <div className='text-center'>Loading...</div>;
-  }
+
 
   if (error) {
     return <div>Error: {error}</div>;
@@ -28,6 +27,7 @@ const Showgrounds = ({ selectedCity }) => {
   
   return (
     <div className="container-fluid cardsection">
+     
       <div>
            <Cardcomponent grounds={filteredPlaygrounds} />
       </div>
