@@ -11,8 +11,8 @@ import loaderGif from "../../Images/loader.gif";
 import BookModal from "../Modals/BookModal";
 //base url
 
-const API_BASE_URL = `http://localhost:5000`;
-//const API_BASE_URL = `https://bookingapp-r0fo.onrender.com`;
+//const API_BASE_URL = `http://localhost:5000`;
+const API_BASE_URL = `https://bookingapp-r0fo.onrender.com`;
 // Helper function to format slot times
 const formatSlot = (slot) => {
   const [hours, minutes] = slot.split(".").map(Number);
