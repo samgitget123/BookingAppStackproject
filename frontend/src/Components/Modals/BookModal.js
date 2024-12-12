@@ -15,8 +15,8 @@ const BookModal = ({
   const dispatch = useDispatch();
   const { bookingId, loading, error } = useSelector((state) => state.ground);
 
-  const API_BASE_URL = `http://localhost:5000`;
-  //const API_BASE_URL = `https://bookingapp-r0fo.onrender.com`;
+  //const API_BASE_URL = `http://localhost:5000`;
+  const API_BASE_URL = `https://bookingapp-r0fo.onrender.com`;
 
   const handleBooking = async (gid, selectedSlots, selectdate) => {
     const bookingData = {
