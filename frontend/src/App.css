@@ -36,8 +36,13 @@ body {
 /* Main content should expand to fill the remaining space */
 .app-main {
   flex: 1; /* Takes the available space between header and footer */
-  padding: 0px; /* Optional padding for spacing */
+  overflow-y: auto; 
+   padding-bottom: 2rem;
+   /* Optional padding for spacing */
   background-color: #fff; /* Optional background color */
+}
+footer {
+  flex-shrink: 0; /* Keep footer at the bottom */
 }
 .loadergifimage{
   width: 50px;
