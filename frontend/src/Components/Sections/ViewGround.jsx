@@ -11,8 +11,8 @@ import loaderGif from "../../Images/loader.gif";
 import BookModal from "../Modals/BookModal";
 //base url
 
-//const API_BASE_URL = `http://localhost:5000`;
-const API_BASE_URL = `https://bookingapp-r0fo.onrender.com`;
+const API_BASE_URL = `http://localhost:5000`;
+//const API_BASE_URL = `https://bookingapp-r0fo.onrender.com`;
 // Helper function to format slot times
 const formatSlot = (slot) => {
   const [hours, minutes] = slot.split(".").map(Number);
@@ -298,9 +298,9 @@ const ViewGround = () => {
 
         <div className="row">
           <div className="col-lg-8 col-sm-12 col-md-12 ">
-            <div className="d-flex justify-content-between flex-wrap">
+            <div className="d-flex  justify-content-evenly justify-content-md-start flex-wrap" style={{backgroundColor: "#006849"}}>
               <div>
-                <div className="secondaryColor card  shadow-lg border-0 g-1  rounded w-100 ">
+                <div>
                   <h6 className="teritoryFont text-light text-center mt-3">
                     Available Slots:
                   </h6>
@@ -327,7 +327,7 @@ const ViewGround = () => {
                 </div>
               </div>
               <div className="mt-sm-3 text-center  ">
-                <div className=" secondaryColor card shadow-lg border-0 g-1  rounded w-100">
+                <div>
                   <h6 className="text-light mt-3">Booked Slots:</h6>
                   <ul className="list-unstyled d-flex flex-wrap flex-column flex-sm-row text-center slotboxes">
                     {bookedslotsbydate.length > 0 ? (

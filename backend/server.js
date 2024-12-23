@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(cors()); // Enable CORS for all routes
 connectDB();
 
-
+app.use('/uploads', express.static('uploads')); // Serve uploaded images
 //Ground Routes
 app.use('/api/ground' , groundRoutes)
 
