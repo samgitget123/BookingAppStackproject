@@ -7,7 +7,7 @@ const createGround = asynHandler(async(req, res) => {
     // Validate required fields
     if (!name || !location || !description) {
         res.status(404);
-        throw new Error('All Fields are required!!!')
+        throw new Error('All Fields are required!!!------fkfkfk------------')
     }
     try {
         // Create a new ground document

@@ -6,7 +6,7 @@ import connectDB from './config/db.js';
 //const groundRoutes = require('./routes/groundRoutes'); 
 import groundRoutes from './routes/groundRoutes.js';
 import Booking from './routes/bookingRoutes.js';
-const port = process.env.PORT || 5001;
+const port = process.env.PORT || 500;
 import { notfound , errorHandler } from './middleware/errorMiddleware.js';
 //import TestData from './Data/TestData.js';
 // Import path and define __dirname for ES modules
@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(cors()); // Enable CORS for all routes
 connectDB();
 
-app.use('/uploads', express.static('uploads')); // Serve uploaded images
+//app.use('/uploads', express.static('uploads')); // Serve uploaded images
 //Ground Routes
 app.use('/api/ground' , groundRoutes)
 

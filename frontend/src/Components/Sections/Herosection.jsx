@@ -47,71 +47,67 @@ const Herosection = () => {
  
   return (
     <>
-      <section className=" text-dark  primaryColor ">
-        <div className="container-fluid">
-          <div className=" d-sm-flex justify-content-evenly ">
-            <div className="row">
-              <div className="col-lg-8" >
-               <Carousels/>
-              </div>
+     <section className="text-dark primaryColor">
+  <div className="container-fluid">
+    <div className="row">
+      {/* Carousel Section */}
+      <div className="col-lg-8 d-none d-md-block">
+        <Carousels />
+      </div>
 
-              <div className="col-lg-4 secondaryColor" style={{borderRadius: "0px 0px 40px 40px"}}>
-                <div className="d-flex align-items-center justify-content-center text-center">
-                  <div className="mt-sm-5">
-                    <div className="mb-3 d-none d-sm-block mb-sm-5 ">
-                      <img
-                        className="img-fluid rotateImage"
-                        src={brandlogo}
-                        alt="logo"
-                      />
-                    </div>
-                    <TypingText/>
-                    <form role="search" onSubmit={(e) => e.preventDefault()}>
-                      <select
-                        className="form-control my-3"
-                        value={selectedCity || city}
-                        onChange={handleCityChange}
-                      >
-                        <option value="">Select a city</option>
-                        {cities.map((city, index) => (
-                          <option key={index} value={city.city}>
-                            {city.city }
-                          </option>
-                        ))}
-                      </select>
-                      <select
-                        className="form-control my-3"
-                        value={selectedArea}
-                        onChange={handleAreaChange}
-                        disabled={!selectedCity}
-                      >
-                        <option value="">Select an area</option>
-                        {selectedCity &&
-                          cities
-                            .find((city) => city.city === selectedCity)
-                            ?.addresses.map((addr, index) => (
-                              <option key={index} value={addr.area}>
-                                {addr.area}
-                              </option>
-                            ))}
-                      </select>
-                    </form>
-                    <div>
-                   <Getlocations  onCityFetched={handleCityFetched} disabled={isGetLocationDisabled}/>
-                    </div>
-                    <div>
-                      <h4 className="webheading">
-                        Find Grounds{" "}
-                        <span className="webheading2"> @ Your Nearest</span>
-                      </h4>
-                    </div>
-                  </div>
-                </div>
-              </div>
+      {/* Form Section */}
+      <div className="col-lg-4 secondaryColor" style={{ borderRadius: "0px 0px 40px 40px" }}>
+        <div className="d-flex align-items-center justify-content-center text-center">
+          <div className="mt-5">
+            <div className="mb-3 d-none d-sm-block mb-sm-5">
+              <img className="img-fluid rotateImage" src={brandlogo} alt="logo" />
+            </div>
+            <TypingText />
+            <form role="search" onSubmit={(e) => e.preventDefault()}>
+              <select
+                className="form-control my-3"
+                value={selectedCity || city}
+                onChange={handleCityChange}
+              >
+                <option value="">Select a city</option>
+                {cities.map((city, index) => (
+                  <option key={index} value={city.city}>
+                    {city.city}
+                  </option>
+                ))}
+              </select>
+              <select
+                className="form-control my-3"
+                value={selectedArea}
+                onChange={handleAreaChange}
+                disabled={!selectedCity}
+              >
+                <option value="">Select an area</option>
+                {selectedCity &&
+                  cities
+                    .find((city) => city.city === selectedCity)
+                    ?.addresses.map((addr, index) => (
+                      <option key={index} value={addr.area}>
+                        {addr.area}
+                      </option>
+                    ))}
+              </select>
+            </form>
+            <div>
+              <Getlocations onCityFetched={handleCityFetched} disabled={isGetLocationDisabled} />
+            </div>
+            <div>
+              <h4 className="webheading">
+                Find Grounds <span className="webheading2"> @ Your Nearest</span>
+              </h4>
             </div>
           </div>
         </div>
-      </section>
+      </div>
+    </div>
+  </div>
+</section>
+
     </>
   );
 };
