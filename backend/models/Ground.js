@@ -16,8 +16,7 @@ const groundSchema = new mongoose.Schema({
         required: true,
     },
     photo: {
-        type: String,
-        required: true,
+        type: String
     },
     description: {
         type: String,

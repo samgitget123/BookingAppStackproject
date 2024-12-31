@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import groundImage from "../../Images/turf.jpeg";
 import loaderGif from "../../Images/loader.gif";
 import SearchBar from "./requires/SearchBar";
 
@@ -9,7 +8,7 @@ const CardComponent = ({ grounds }) => {
   const [cardsPerPage, setCardsPerPage] = useState(8);
   const [loading, setLoading] = useState(true);
   const [filteredData, setFilteredData] = useState(grounds); // Filtered data starts with all grounds
-
+console.log(grounds, 'grounds');
   useEffect(() => {
     setFilteredData(grounds); // Update filtered data whenever grounds change
   }, [grounds]);
@@ -44,7 +43,7 @@ const CardComponent = ({ grounds }) => {
   const indexOfLastCard = currentPage * cardsPerPage;
   const indexOfFirstCard = indexOfLastCard - cardsPerPage;
   const currentCards = filteredData.slice(indexOfFirstCard, indexOfLastCard); // Use filteredData for slicing
-
+console.log(currentCards , 'currencards');
   const handleSearch = (results) => {
     setFilteredData(results); // Update the filtered data
     setCurrentPage(1); // Reset to the first page after filtering
@@ -94,7 +93,7 @@ const CardComponent = ({ grounds }) => {
               >
                 <div className="card h-50 shadow-lg border-0 rounded">
                   <img
-                    src={groundImage}
+                    src={`http://localhost:5000/uploads/${playground.data.photo}`}
                     className="card-img-top img-fluid groundImgsize"
                     alt={playground.data.name}
                   />

@@ -15,11 +15,20 @@ import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const app = express();
+// app.use("/uploads", express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(cors()); // Enable CORS for all routes
 connectDB();
+// Serve uploaded images
+app.use("/uploads", express.static(path.join(__dirname, '../uploads')));
 
-//app.use('/uploads', express.static('uploads')); // Serve uploaded images
+
+
+// Serve uploaded images (Static Middleware)
+console.log("Uploads folder path: ", path.join(__dirname, '../uploads'));
+
+
+
 //Ground Routes
 app.use('/api/ground' , groundRoutes)
 
@@ -29,7 +38,7 @@ app.use('/api/booking' , Booking);
 //make it for build
 if(process.env.NODE_ENV === 'production'){
     app.use(express.static(path.join(__dirname, '../frontend/build')));
-
+   
     app.get('*' , (req, res) => 
     res.sendFile(path.resolve(__dirname, '../frontend', 'build' , 'index.html')));
 }else{

@@ -146,9 +146,10 @@ const ViewGround = () => {
 
   if (error) return <div>Error: {error}</div>;
   if (!ground) return <div>No ground data available</div>;
-
+console.log(ground,'grounddetails');
   const { name, location, data, slots } = ground;
-  const imageUrl = data?.image || groundImage;
+  const imageUrl = data?.photo || groundImage;
+  console.log(data.image,'imageurl');
   const description = data?.desc || "No Description";
   const bookedSlots = slots?.booked || [];
   // const allSlots = ['6.0', '6.5', '7.0', '7.5', '8.0', '8.5', '9.0', '9.5', '10.0', '10.5', '11.0', '11.5', '12.0', '12.5', '1.0', '1.5', '2.0' , '2.5' , '3.0','3.5','4.0','4.5','5.0','5.5','6.0','6.5','7.0','7.5','8.0','8.5','9.0','10.0','10.5','11.0','11.5','12.0','12.5','13.0','13.5'];
@@ -298,7 +299,7 @@ const ViewGround = () => {
 
         <div className="row">
           <div className="col-lg-8 col-sm-12 col-md-12 ">
-            <div className="d-flex  justify-content-evenly justify-content-md-start flex-wrap" style={{backgroundColor: "#006849"}}>
+            <div className="d-flex  justify-content-evenly justify-content-md-start flex-wrap mb-3" style={{backgroundColor: "#006849"}}>
               <div>
                 <div>
                   <h6 className="teritoryFont text-light text-center mt-3">
@@ -326,8 +327,8 @@ const ViewGround = () => {
                   </ul>
                 </div>
               </div>
-              <div className="mt-sm-3 text-center  ">
-                <div>
+              <div className="mt-sm-3 d-flex ">
+                <div className="text-center">
                   <h6 className="text-light mt-3">Booked Slots:</h6>
                   <ul className="list-unstyled d-flex flex-wrap flex-column flex-sm-row text-center slotboxes">
                     {bookedslotsbydate.length > 0 ? (
@@ -344,7 +345,7 @@ const ViewGround = () => {
                         </li>
                       ))
                     ) : (
-                      <li className="text-danger nobookedslots m-1">
+                      <li className="text-danger text-center nobookedslots m-1">
                         No booked slots
                       </li>
                     )}
@@ -354,29 +355,33 @@ const ViewGround = () => {
             </div>
           </div>
           <div className="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-xlg-6 g-0  ">
-            <div className="card shadow-lg border-0  w-80 rounded secondaryColor viewcardFont mt-3">
-              <div className="mobileconfirmnow  d-flex justify-content-center mt-3">
-                <button
-                  variant="primary"
-                  className="btn btn-primary confirmbtn"
-                  onClick={confirnnowClick}
-                >
-                  Confirm Now
-                </button>
-              </div>
-              <img
-                src={imageUrl}
-                className="card-img-top ground-image img-fluid mb-3"
-                alt={name || "Ground Image"}
-              />
-              <div className="card-body">
-                <h5 className="card-title">{name || "No Name"}</h5>
-                <h6 className="card-subtitle mb-2 viewcardFont">
-                  Location: {location || "No Location"}
-                </h6>
-                <p className="card-text viewcardFont">{description}</p>
-              </div>
-            </div>
+          <div className="card shadow-lg border-0 w-80 rounded secondaryColor viewcardFont mt-3 mx-auto">
+  <div className="mobileconfirmnow d-flex justify-content-center my-3">
+    <button
+      variant="primary"
+      className="btn btn-primary confirmbtn"
+      onClick={confirnnowClick}
+    >
+      Confirm Now
+    </button>
+  </div>
+  <div className="d-flex justify-content-center">
+    <img
+      src={`${API_BASE_URL}/uploads/${data.image}`}
+      className="card-img-top ground-image img-fluid mb-3"
+      alt={name || "Ground Image"}
+      style={{ width: '300px', height: '200px' }} 
+    />
+  </div>
+  <div className="card-body text-center">
+    <h5 className="card-title">{name || "No Name"}</h5>
+    <h6 className="card-subtitle mb-2 viewcardFont">
+      Location: {location || "No Location"}
+    </h6>
+    <p className="card-text viewcardFont">{description}</p>
+  </div>
+</div>
+
           </div>
         </div>
 

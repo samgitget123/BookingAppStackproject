@@ -5,6 +5,8 @@ import Home from './Components/Sections/Home';
 import ViewGround from './Components/Sections/ViewGround';
 import Booknow from './Components/Sections/Booknow';
 import Payment from './Components/Sections/Payment';
+import CreateGroundForm from './spares/CreateGroundForm';
+import NotFoundScreen from './Components/Sections/requires/NotFoundScreen';
 // Redux
 import { Provider } from 'react-redux';
 import store from './Store';
@@ -24,8 +26,10 @@ const App = () => {
         <main className="app-main">
             <Routes>
               <Route path="/" element={<Home />} />
+              <Route path="/createground" element={<CreateGroundForm />} exact />
               <Route path="/viewground/:gid" element={<ViewGround />} />
               <Route path="/payment/:gid" element={<Payment />} />
+              <Route path="*" element={<NotFoundScreen />} />
             </Routes>
         </main>
         <Footer/>

@@ -1,9 +1,11 @@
+import multer from 'multer';
+import path from 'path';
 import express from 'express';
 const router = express.Router();
 import { createGround , getGroundsByLocation , getGroundsByIdandDate } from '../controllers/groundsController.js';
-
-
-router.route('/createGround').post(createGround);
+//import upload from '../middleware/imageUpload.js';
+import {upload} from '../middleware/upload.js';
+router.route('/createGround').post(upload.single("photo"), createGround);
 
 router.route('/').get(getGroundsByLocation);
 

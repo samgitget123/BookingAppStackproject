@@ -2,8 +2,10 @@ import asynHandler from '../middleware/asyncHandler.js';
 import Ground from '../models/Ground.js';
 import Booking from '../models/Booking.js';
 
+
 const createGround = asynHandler(async(req, res) => {
-    const { name, location, photo, description } = req.body;
+    const { name, location , description } = req.body;
+    const photo = req.file ? req.file.filename : null;
     // Validate required fields
     if (!name || !location || !description) {
         res.status(404);
