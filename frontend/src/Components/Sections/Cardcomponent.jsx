@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import loaderGif from "../../Images/loader.gif";
 import SearchBar from "./requires/SearchBar";
-
+//const API_BASE_URL = `http://localhost:5000`;
+const API_BASE_URL = `https://bookingapp-r0fo.onrender.com`;
 const CardComponent = ({ grounds }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage, setCardsPerPage] = useState(8);
@@ -93,7 +94,7 @@ console.log(currentCards , 'currencards');
               >
                 <div className="card h-50 shadow-lg border-0 rounded">
                   <img
-                    src={`http://localhost:5000/uploads/${playground.data.photo}`}
+                    src={`${API_BASE_URL}/uploads/${playground.data.photo}`}
                     className="card-img-top img-fluid groundImgsize"
                     alt={playground.data.name}
                   />
