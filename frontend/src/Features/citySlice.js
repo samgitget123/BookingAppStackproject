@@ -3,9 +3,9 @@
 // citySlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-//const API_BASE_URL = `http://localhost:5000`;
-const API_BASE_URL = `https://bookingapp-r0fo.onrender.com`;
-console.log("API Base URL:", API_BASE_URL);
+const baseUrl = `http://localhost:5000`;
+//const baseUrl = `https://bookingapp-r0fo.onrender.com`;
+console.log("API Base URL:", baseUrl);
 const initialState = {
   cities: [
     {
@@ -182,7 +182,7 @@ const initialState = {
 export const fetchPlaygrounds = createAsyncThunk(
   'city/fetchPlaygrounds',
   async (location, thunkAPI) => {
-    const response = await fetch(`${API_BASE_URL}/api/ground?location=${location}`);
+    const response = await fetch(`${baseUrl}/api/ground?location=${location}`);
   console.log(response, 'showgroundsapi');
     if (!response.ok) {
       throw new Error('Failed to fetch playgrounds');

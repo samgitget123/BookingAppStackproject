@@ -7,6 +7,7 @@ import Booknow from './Components/Sections/Booknow';
 import Payment from './Components/Sections/Payment';
 import CreateGroundForm from './spares/CreateGroundForm';
 import NotFoundScreen from './Components/Sections/requires/NotFoundScreen';
+import { BaseUrlProvider } from './Contexts/BaseUrlContext';
 // Redux
 import { Provider } from 'react-redux';
 import store from './Store';
@@ -20,6 +21,7 @@ const App = () => {
   console.log(base_url,'base_url')
   return (
     <Provider store={store}>
+      <BaseUrlProvider>
       <Router>
         <div className="app-container">
         <Header /> {/* Placed outside of <main> so that header appears on all pages */}
@@ -35,6 +37,7 @@ const App = () => {
         <Footer/>
         </div>
       </Router>
+      </BaseUrlProvider>
     </Provider>
   );
 };

@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { useParams, useNavigate } from "react-router-dom";
 import { bookSlot } from "../../Features/groundSlice";
+import { useBaseUrl } from "../../Contexts/BaseUrlContext";
+
 const BookModal = ({
   showModal,
   handleCloseModal,
@@ -14,9 +16,9 @@ const BookModal = ({
   const [info, setInfo] = useState("");
   const dispatch = useDispatch();
   const { bookingId, loading, error } = useSelector((state) => state.ground);
-
-  //const API_BASE_URL = `http://localhost:5000`;
-  const API_BASE_URL = `https://bookingapp-r0fo.onrender.com`;
+  const { baseUrl } = useBaseUrl();
+  //const baseUrl = `http://localhost:5000`;
+  //const baseUrl = `https://bookingapp-r0fo.onrender.com`;
 
   const handleBooking = async (gid, selectedSlots, selectdate) => {
     const bookingData = {
@@ -26,7 +28,7 @@ const BookModal = ({
     };
 
     try {
-      const response = await fetch(`${API_BASE_URL}/api/booking/book-slot`, {
+      const response = await fetch(`${baseUrl}/api/booking/book-slot`, {
         method: "POST", // Specify the method
         headers: {
           "Content-Type": "application/json", // Specify content type

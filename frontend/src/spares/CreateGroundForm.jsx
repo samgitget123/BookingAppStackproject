@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import axios from "axios";
-//const API_BASE_URL = `http://localhost:5000`;
-const API_BASE_URL = `https://bookingapp-r0fo.onrender.com`;
+//const baseUrl = `http://localhost:5000`;
+const baseUrl = `https://bookingapp-r0fo.onrender.com`;
 const CreateGroundForm = () => {
   const [formData, setFormData] = useState({
     name: "",
@@ -46,7 +46,7 @@ const CreateGroundForm = () => {
 
       try {
         const response = await axios.post(
-          `${API_BASE_URL}/api/ground/createGround`, // Replace with your API endpoint
+          `${baseUrl}/api/ground/createGround`, // Replace with your API endpoint
           formDataToSubmit,
           {
             headers: {

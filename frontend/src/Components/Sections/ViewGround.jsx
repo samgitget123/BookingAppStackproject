@@ -10,9 +10,10 @@ import loaderGif from "../../Images/loader.gif";
 //Modal
 import BookModal from "../Modals/BookModal";
 //base url
+import { useBaseUrl } from "../../Contexts/BaseUrlContext";
 
-//const API_BASE_URL = `http://localhost:5000`;
-const API_BASE_URL = `https://bookingapp-r0fo.onrender.com`;
+//const baseUrl = `http://localhost:5000`;
+//const baseUrl = `https://bookingapp-r0fo.onrender.com`;
 // Helper function to format slot times
 const formatSlot = (slot) => {
   const [hours, minutes] = slot.split(".").map(Number);
@@ -49,7 +50,7 @@ const formatDate = (date) => {
 const ViewGround = () => {
   const { gid } = useParams();
   const dispatch = useDispatch();
-
+  const { baseUrl } = useBaseUrl();
   const navigate = useNavigate();
   const groundState = useSelector((state) => state.ground || {});
   const { ground, loading, error } = groundState;
@@ -68,7 +69,7 @@ const ViewGround = () => {
   const fetchGroundDetailsWithDate = async (formattedDate) => {
     try {
       const response = await axios.get(
-        `${API_BASE_URL}/api/ground/${gid}?date=${formattedDate}`
+        `${baseUrl}/api/ground/${gid}?date=${formattedDate}`
       );
       //http://localhost:5000/api/ground/GND18NT79YDS?date=2024-12-25
       setBookings(response.data.slots.booked || []);
@@ -107,7 +108,7 @@ const ViewGround = () => {
 
       try {
         const response = await axios.post(
-          `${API_BASE_URL}/api/booking/book-slot`,
+          `${baseUrl}/api/booking/book-slot`,
           bookingData
         );
 
@@ -367,7 +368,7 @@ console.log(ground,'grounddetails');
   </div>
   <div className="d-flex justify-content-center">
     <img
-      src={`${API_BASE_URL}/uploads/${data.image}`}
+      src={`${baseUrl}/uploads/${data.image}`}
       className="card-img-top ground-image img-fluid mb-3"
       alt={name || "Ground Image"}
       style={{ width: '300px', height: '200px' }} 

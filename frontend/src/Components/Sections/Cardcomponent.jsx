@@ -2,14 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import loaderGif from "../../Images/loader.gif";
 import SearchBar from "./requires/SearchBar";
-//const API_BASE_URL = `http://localhost:5000`;
-const API_BASE_URL = `https://bookingapp-r0fo.onrender.com`;
+import { useBaseUrl } from "../../Contexts/BaseUrlContext";
 const CardComponent = ({ grounds }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [cardsPerPage, setCardsPerPage] = useState(8);
   const [loading, setLoading] = useState(true);
   const [filteredData, setFilteredData] = useState(grounds); // Filtered data starts with all grounds
 console.log(grounds, 'grounds');
+const { baseUrl } = useBaseUrl();
+console.log("Base URL:", baseUrl);
   useEffect(() => {
     setFilteredData(grounds); // Update filtered data whenever grounds change
   }, [grounds]);
@@ -87,35 +88,51 @@ console.log(currentCards , 'currencards');
         <div className="row g-2">
           {currentCards && currentCards.length > 0 ? (
             currentCards.map((playground, index) => (
+              <div className="col-lg-2 col-md-6 col-sm-12" key={index} onClick={() => handleCardClick(playground.ground_id)}>
               <div
-                className="col-lg-2 col-md-6 col-sm-12"
-                key={index}
-                onClick={() => handleCardClick(playground.ground_id)}
+                className="card shadow-lg border-0 rounded"
+                style={{
+                  width: "100%",
+                 
+                }}
               >
-                <div className="card h-50 shadow-lg border-0 rounded">
-                  <img
-                    src={`${API_BASE_URL}/uploads/${playground.data.photo}`}
-                    className="card-img-top img-fluid groundImgsize"
-                    alt={playground.data.name}
-                  />
-                  <div
-                    className="card-body secondaryColor"
-                    style={{ padding: "10px 10px" }}
-                  >
-                    <h4 className="card-title teritoryFont cardheadfont">
-                      <i className="fa-thin fa-cricket-bat-ball"></i>{" "}
-                      {playground.data.name}
-                    </h4>
-                    <p className="card-text  teritoryFont">
-                      <i
-                        className="fas fa-map-marker-alt"
-                        style={{ color: "#00EE64" }}
-                      ></i>{" "}
-                      {playground.data.location}
-                    </p>
-                  </div>
+                <div
+                  className="card-img-top"
+                  style={{
+                    height: "200px", // Set fixed height for the image container
+                    backgroundColor: "#f0f0f0", // Fallback background for missing images
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {playground.data.photo ? (
+                    <img
+                      src={`${baseUrl}/uploads/${playground.data.photo}`}
+                      alt={playground.data.name}
+                      className="img-fluid"
+                      style={{
+                        height: "100%",
+                        width: "100%",
+                        objectFit: "cover", // Ensures image fits the container
+                      }}
+                    />
+                  ) : (
+                    <span>No Image Available</span> // Placeholder text for missing images
+                  )}
+                </div>
+                <div className="card-body secondaryColor" >
+                  <h4 className="card-title teritoryFont cardheadfont">
+                    <i className="fa-thin fa-cricket-bat-ball"></i> {playground.data.name}
+                  </h4>
+                  <p className="card-text teritoryFont">
+                    <i className="fas fa-map-marker-alt" style={{ color: "#00EE64" }}></i>{" "}
+                    {playground.data.location}
+                  </p>
                 </div>
               </div>
+            </div>
+            
             ))
           ) : (
             <div className="col-12">
