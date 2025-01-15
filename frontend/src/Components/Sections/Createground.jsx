@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-
 const Createground = () => {
   const [formData, setFormData] = useState({
     city: "",
@@ -12,12 +11,9 @@ const Createground = () => {
     description: "",
     photo: null,
   });
-
   const [errors, setErrors] = useState({});
-
   const validate = () => {
     const newErrors = {};
-
     if (!formData.city) newErrors.city = "City is required.";
     if (!formData.country) newErrors.country = "Country is required.";
     if (!formData.state) newErrors.state = "State is required.";
@@ -30,20 +26,16 @@ const Createground = () => {
       newErrors.description = "Description is required.";
     if (!formData.photo)
       newErrors.photo = "Photo is required.";
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
   const handleFileChange = (e) => {
     setFormData({ ...formData, photo: e.target.files[0] });
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (validate()) {
@@ -51,7 +43,6 @@ const Createground = () => {
       Object.keys(formData).forEach((key) => {
         formDataToSubmit.append(key, formData[key]);
       });
-
       console.log("Form submitted successfully", formData);
       // Add API submission logic here
       alert("Form submitted successfully!");
@@ -69,7 +60,6 @@ const Createground = () => {
     }
   };
   console.log("Submitting Form Data:", formData);
-
   return (
     <div className="admin-form-container">
       <h2>Add Ground Details</h2>
@@ -84,7 +74,6 @@ const Createground = () => {
           />
           {errors.city && <p className="error">{errors.city}</p>}
         </div>
-
         <div>
           <label>Country</label>
           <input
@@ -95,7 +84,6 @@ const Createground = () => {
           />
           {errors.country && <p className="error">{errors.country}</p>}
         </div>
-
         <div>
           <label>State</label>
           <input
@@ -106,7 +94,6 @@ const Createground = () => {
           />
           {errors.state && <p className="error">{errors.state}</p>}
         </div>
-
         <div>
           <label>District</label>
           <input
@@ -117,7 +104,6 @@ const Createground = () => {
           />
           {errors.district && <p className="error">{errors.district}</p>}
         </div>
-
         <div>
           <label>Area</label>
           <input
@@ -128,7 +114,6 @@ const Createground = () => {
           />
           {errors.area && <p className="error">{errors.area}</p>}
         </div>
-
         <div>
           <label>Ground Name</label>
           <input
@@ -139,7 +124,6 @@ const Createground = () => {
           />
           {errors.groundName && <p className="error">{errors.groundName}</p>}
         </div>
-
         <div>
           <label>Price</label>
           <input
@@ -150,7 +134,6 @@ const Createground = () => {
           />
           {errors.price && <p className="error">{errors.price}</p>}
         </div>
-
         <div>
           <label>Description</label>
           <textarea
@@ -160,7 +143,6 @@ const Createground = () => {
           ></textarea>
           {errors.description && <p className="error">{errors.description}</p>}
         </div>
-
         <div>
           <label>Photo</label>
           <input
@@ -171,11 +153,9 @@ const Createground = () => {
           />
           {errors.photo && <p className="error">{errors.photo}</p>}
         </div>
-
         <button type="submit">Submit</button>
       </form>
     </div>
   );
 };
-
 export default Createground;

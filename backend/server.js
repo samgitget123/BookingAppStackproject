@@ -14,20 +14,15 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+console.log( __dirname, 'imagedirectory');
 const app = express();
 // app.use("/uploads", express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(cors()); // Enable CORS for all routes
 connectDB();
 // Serve uploaded images
-app.use("/uploads", express.static(path.join(__dirname, '../uploads')));
-
-
-
-// Serve uploaded images (Static Middleware)
-console.log("Uploads folder path: ", path.join(__dirname, '../uploads'));
-
-
+//app.use("/uploads", express.static(path.join(__dirname, '../uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 //Ground Routes
 app.use('/api/ground' , groundRoutes)
