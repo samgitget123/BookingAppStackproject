@@ -119,9 +119,16 @@ import Booking from '../models/Booking.js';
 // });
 const createGround = asynHandler(async (req, res) => {
     const { name, location, description } = req.body;
+    // Log request body and file for debugging
+  console.log('Request Body:', req.body);
+  console.log('Uploaded File:', req.file);
+
+  // Validate file
+  if (!req.file) {
+    return res.status(400).json({ message: 'Photo file is required' });
+  }
     const photo = req.file ? req.file.filename : null;
-    console.log('Request body:', req.body);
-    console.log('Uploaded file:', req.file);
+  
     // Log file information
   console.log('File received:', req.file);
     // Ensure the file exists in the request

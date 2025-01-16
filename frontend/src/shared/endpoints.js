@@ -1,6 +1,6 @@
 const endpoints = {
     development: {
-      baseUrl: "https://bookingapp-r0fo.onrender.com",  //https://bookingapp-r0fo.onrender.com/
+      //baseUrl: "https://bookingapp-r0fo.onrender.com",  //https://bookingapp-r0fo.onrender.com/
     },
     production: {
       baseUrl: "http://localhost:5000",  // Production endpoint

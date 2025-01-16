@@ -1,6 +1,6 @@
 // config.js
 const endpoints = {
-  production: "https://bookingapp-r0fo.onrender.com",  // Development endpoint
+ //production: "https://bookingapp-r0fo.onrender.com",  // Development endpoint
   development: "http://localhost:5000",                // Production endpoint
 };
 
