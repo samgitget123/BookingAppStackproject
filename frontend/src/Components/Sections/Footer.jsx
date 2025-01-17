@@ -7,11 +7,7 @@ const Footer = () => {
   return (
    <footer className='bg-dark'>
         <Container>
-            <Row>
-                <Col className='text-center pt-3'>
-                    <p className='text-light'>Book My Ground &copy; {currentYear}</p>
-                </Col>
-            </Row>
+        <p className='text-light text-center py-2' style={{marginBottom: "0px"}}>Book My Ground &copy; {currentYear}</p>
         </Container>
    </footer>
   )

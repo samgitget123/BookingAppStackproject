@@ -1,25 +1,74 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useBaseUrl } from "../../Contexts/BaseUrlContext";
-//const baseUrl = `http://localhost:5000`;
-//const baseUrl = `https://bookingapp-r0fo.onrender.com`;
+
 const CreateGroundForm = () => {
-   const { baseUrl } = useBaseUrl();
+  const { baseUrl } = useBaseUrl();
   const [formData, setFormData] = useState({
     name: "",
     location: "",
+    country: "",
+    state: "",
+    stateDistrict: "",
     photo: null,
     description: "",
   });
 
   const [errors, setErrors] = useState({});
   const [isLoading, setIsLoading] = useState(false);
+  const [locationLoaded, setLocationLoaded] = useState(false);
+
+  // Function to get the user's geolocation and fetch the details
+  const getUserLocation = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+          
+          try {
+            // Using OpenStreetMap API (or any other API you prefer) for reverse geocoding
+            const res = await axios.get(
+              `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1`
+            );
+            
+            const address = res.data.address;
+            // Setting the location details in form state
+            setFormData({
+              ...formData,
+              state: address.state || "",
+              stateDistrict: address.state_district || "",
+              location: address.village || "",
+              country: address.country || "",
+            });
+            setLocationLoaded(true);
+          } catch (error) {
+            console.error("Error fetching location data:", error);
+            alert("Unable to fetch location. Please check your network.");
+          }
+        },
+        (error) => {
+          console.error("Geolocation error:", error);
+          alert("Unable to retrieve your location.");
+        }
+      );
+    } else {
+      alert("Geolocation is not supported by your browser.");
+    }
+  };
+
+  useEffect(() => {
+    // Get the user location on initial load
+    getUserLocation();
+  }, []);
 
   const validate = () => {
     const newErrors = {};
 
     if (!formData.name) newErrors.name = "Name is required.";
     if (!formData.location) newErrors.location = "Location is required.";
+    if (!formData.country) newErrors.country = "Country is required.";
+    if (!formData.state) newErrors.state = "State is required.";
+    if (!formData.stateDistrict) newErrors.stateDistrict = "State District is required.";
     if (!formData.description) newErrors.description = "Description is required.";
     if (!formData.photo) newErrors.photo = "Photo is required.";
 
@@ -38,17 +87,16 @@ const CreateGroundForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    
     if (validate()) {
       setIsLoading(true);
       const formDataToSubmit = new FormData();
       Object.keys(formData).forEach((key) => {
         formDataToSubmit.append(key, formData[key]);
       });
-
       try {
         const response = await axios.post(
-          `${baseUrl}/api/ground/createGround`, // Replace with your API endpoint
+          `${baseUrl}/api/ground/createGround`,
           formDataToSubmit,
           {
             headers: {
@@ -59,17 +107,22 @@ const CreateGroundForm = () => {
         console.log("Form submitted successfully", response.data);
         alert("Ground added successfully!");
 
+        // Reset form fields after successful submission
         setFormData({
           name: "",
           location: "",
+          country: "",
+          state: "",
+          stateDistrict: "",
           photo: null,
           description: "",
         });
+        setErrors({}); // Clear errors
       } catch (error) {
-        console.error("Error submitting the form:", error);
-        alert("Failed to add ground. Please try again.");
+        console.error("Error submitting the form:", error.message);
+        alert("Failed to add ground. Please check the network connection.");
       } finally {
-        setIsLoading(false);
+        setIsLoading(false); // Always reset loading state
       }
     }
   };
@@ -81,7 +134,7 @@ const CreateGroundForm = () => {
         {/* Name */}
         <div className="col-md-6">
           <label htmlFor="name" className="form-label">
-            Name
+            Ground Name
           </label>
           <input
             type="text"
@@ -92,24 +145,6 @@ const CreateGroundForm = () => {
             onChange={handleInputChange}
           />
           {errors.name && <div className="invalid-feedback">{errors.name}</div>}
-        </div>
-
-        {/* Location */}
-        <div className="col-md-6">
-          <label htmlFor="location" className="form-label">
-            Location
-          </label>
-          <input
-            type="text"
-            className={`form-control ${errors.location ? "is-invalid" : ""}`}
-            id="location"
-            name="location"
-            value={formData.location}
-            onChange={handleInputChange}
-          />
-          {errors.location && (
-            <div className="invalid-feedback">{errors.location}</div>
-          )}
         </div>
 
         {/* Photo */}
@@ -143,6 +178,74 @@ const CreateGroundForm = () => {
           ></textarea>
           {errors.description && (
             <div className="invalid-feedback">{errors.description}</div>
+          )}
+        </div>
+
+        {/* Location */}
+        <div className="col-md-6">
+          <label htmlFor="location" className="form-label">
+            Location
+          </label>
+          <input
+            type="text"
+            className={`form-control ${errors.location ? "is-invalid" : ""}`}
+            id="location"
+            name="location"
+            value={formData.location}
+            onChange={handleInputChange}
+          />
+          {errors.location && (
+            <div className="invalid-feedback">{errors.location}</div>
+          )}
+        </div>
+
+        {/* Country */}
+        <div className="col-md-6">
+          <label htmlFor="country" className="form-label">
+            Country
+          </label>
+          <input
+            type="text"
+            className={`form-control ${errors.country ? "is-invalid" : ""}`}
+            id="country"
+            name="country"
+            value={formData.country}
+            onChange={handleInputChange}
+          />
+          {errors.country && <div className="invalid-feedback">{errors.country}</div>}
+        </div>
+
+        {/* State */}
+        <div className="col-md-6">
+          <label htmlFor="state" className="form-label">
+            State
+          </label>
+          <input
+            type="text"
+            className={`form-control ${errors.state ? "is-invalid" : ""}`}
+            id="state"
+            name="state"
+            value={formData.state}
+            onChange={handleInputChange}
+          />
+          {errors.state && <div className="invalid-feedback">{errors.state}</div>}
+        </div>
+
+        {/* State District */}
+        <div className="col-md-6">
+          <label htmlFor="stateDistrict" className="form-label">
+            State District
+          </label>
+          <input
+            type="text"
+            className={`form-control ${errors.stateDistrict ? "is-invalid" : ""}`}
+            id="stateDistrict"
+            name="stateDistrict"
+            value={formData.stateDistrict}
+            onChange={handleInputChange}
+          />
+          {errors.stateDistrict && (
+            <div className="invalid-feedback">{errors.stateDistrict}</div>
           )}
         </div>
 

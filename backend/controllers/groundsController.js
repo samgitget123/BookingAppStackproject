@@ -2,173 +2,120 @@ import asynHandler from '../middleware/asyncHandler.js';
 import Ground from '../models/Ground.js';
 import Booking from '../models/Booking.js';
 
-
-// const createGround = asynHandler(async(req, res) => {
-//     const { name, location , description } = req.body;
-//     const photo = req.file ? req.file.filename : req.file.path;
-//     console.log(photo, 'photo')
-//     // Validate required fields
-//     if (!name || !location || !description) {
-//         res.status(404);
-//         throw new Error('All Fields are required!!!------fkfkfk------------')
-//     }
-//     try {
-//         // Create a new ground document
-//         const newGround = new Ground({
-//             name,
-//             location,
-//             photo,
-//             description
-//         });
-
-//         // Save the new ground document to the database
-//         await newGround.save();
-
-//         // Respond with the newly created ground data
-//         res.status(201).json({
-//             message: 'Ground created successfully',
-//             ground: {
-//                 ground_id: newGround.ground_id,
-//                 name: newGround.name,
-//                 location: newGround.location,
-//                 photo: newGround.photo,
-//                 description: newGround.description,
-//             }
-//         });
-//     } catch (error) {
-//         res.status(404);
-//         throw new Error('SERVER ERROR')
-//     }
-// });
 // const createGround = asynHandler(async (req, res) => {
 //     const { name, location, description } = req.body;
+//     // Log request body and file for debugging
+//   console.log('Request Body:', req.body);
+//   console.log('Uploaded File:', req.file);
 
-//     // Check if a file was uploaded
+//   // Validate file
+//   if (!req.file) {
+//     return res.status(400).json({ message: 'Photo file is required' });
+//   }
 //     const photo = req.file ? req.file.filename : null;
-
-//     // Validate required fields
-//     if (!name || !location || !description || !photo) {
-//         res.status(400);
-//         throw new Error('All fields, including photo, are required!');
+  
+//     // Log file information
+//   console.log('File received:', req.file);
+//     // Ensure the file exists in the request
+//     if (!req.file) {
+//       return res.status(400).json({ message: 'File is required' });
 //     }
-
-//     try {
-//         // Create a new ground document
-//         const newGround = new Ground({
-//             name,
-//             location,
-//             photo,
-//             description,
-//         });
-
-//         // Save the new ground document to the database
-//         await newGround.save();
-
-//         // Respond with the newly created ground data
-//         res.status(201).json({
-//             message: 'Ground created successfully',
-//             ground: {
-//                 ground_id: newGround.ground_id,
-//                 name: newGround.name,
-//                 location: newGround.location,
-//                 photo: newGround.photo,
-//                 description: newGround.description,
-//             },
-//         });
-//     } catch (error) {
-//         console.error('Error creating ground:', error.message);
-//         res.status(500);
-//         throw new Error('Server error while creating ground');
-//     }
-// });
-// const createGround = asynHandler(async(req, res) => {
-//     const { name, location , description } = req.body;
-//     const photo = req.file ? req.file.filename : null;
+  
 //     // Validate required fields
 //     if (!name || !location || !description) {
-//         res.status(404);
-//         throw new Error('All Fields are required!!!------fkfkfk------------')
+//       res.status(404);
+//       throw new Error('All Fields are required');
 //     }
+  
 //     try {
-//         // Create a new ground document
-//         const newGround = new Ground({
-//             name,
-//             location,
-//             photo,
-//             description
-//         });
-
-//         // Save the new ground document to the database
-//         await newGround.save();
-
-//         // Respond with the newly created ground data
-//         res.status(201).json({
-//             message: 'Ground created successfully',
-//             ground: {
-//                 ground_id: newGround.ground_id,
-//                 name: newGround.name,
-//                 location: newGround.location,
-//                 photo: newGround.photo,
-//                 description: newGround.description,
-//             }
-//         });
+//       // Create a new ground document
+//       const newGround = new Ground({
+//         name,
+//         location,
+//         photo,
+//         description
+//       });
+  
+//       // Save the new ground document to the database
+//       await newGround.save();
+  
+//       // Respond with the newly created ground data
+//       res.status(201).json({
+//         message: 'Ground created successfully',
+//         ground: {
+//           ground_id: newGround.ground_id,
+//           name: newGround.name,
+//           location: newGround.location,
+//           photo: newGround.photo,
+//           description: newGround.description,
+//         }
+//       });
 //     } catch (error) {
-//         res.status(404);
-//         throw new Error('SERVER ERROR')
+//       console.error('Error creating ground:', error);
+//       res.status(500);
+//       throw new Error('SERVER ERROR');
 //     }
-// });
+//   });
 const createGround = asynHandler(async (req, res) => {
-    const { name, location, description } = req.body;
+    const { name, location, country, state, stateDistrict, description } = req.body;
+  
     // Log request body and file for debugging
-  console.log('Request Body:', req.body);
-  console.log('Uploaded File:', req.file);
-
-  // Validate file
-  if (!req.file) {
-    return res.status(400).json({ message: 'Photo file is required' });
-  }
+    console.log('Request Body:', req.body);
+    console.log('Uploaded File:', req.file);
+  
+    // Validate file
+    if (!req.file) {
+        return res.status(400).json({ message: 'Photo file is required' });
+    }
     const photo = req.file ? req.file.filename : null;
   
     // Log file information
-  console.log('File received:', req.file);
+    console.log('File received:', req.file);
+    
     // Ensure the file exists in the request
     if (!req.file) {
-      return res.status(400).json({ message: 'File is required' });
+        return res.status(400).json({ message: 'File is required' });
     }
   
-    // Validate required fields
-    if (!name || !location || !description) {
-      res.status(404);
-      throw new Error('All Fields are required');
+    // Validate required fields including area, state, and district
+    if (!name || !location || !country || !state || !stateDistrict || !description) {
+        res.status(404);
+        throw new Error('All Fields (name, location, area, state, stateDistrict, description) are required');
     }
   
     try {
-      // Create a new ground document
-      const newGround = new Ground({
-        name,
-        location,
-        photo,
-        description
-      });
+        // Create a new ground document with state and stateDistrict
+        const newGround = new Ground({
+            name,
+            location,
+            country,
+            state,         // Save the state
+            stateDistrict, // Save the state district
+            photo,
+            description
+        });
   
-      // Save the new ground document to the database
-      await newGround.save();
+        // Save the new ground document to the database
+        await newGround.save();
   
-      // Respond with the newly created ground data
-      res.status(201).json({
-        message: 'Ground created successfully',
-        ground: {
-          ground_id: newGround.ground_id,
-          name: newGround.name,
-          location: newGround.location,
-          photo: newGround.photo,
-          description: newGround.description,
-        }
-      });
+        // Respond with the newly created ground data
+        res.status(201).json({
+            message: 'Ground created successfully',
+            ground: {
+                ground_id: newGround.ground_id,
+                name: newGround.name,
+                location: newGround.location,
+                country: newGround.country,
+                state: newGround.state,       // Include state in the response
+                stateDistrict: newGround.stateDistrict, // Include state district in the response
+                photo: newGround.photo,
+                description: newGround.description,
+            }
+        });
     } catch (error) {
-      console.error('Error creating ground:', error);
-      res.status(500);
-      throw new Error('SERVER ERROR');
+        console.error('Error creating ground:', error);
+        res.status(500);
+        throw new Error('SERVER ERROR');
     }
   });
   

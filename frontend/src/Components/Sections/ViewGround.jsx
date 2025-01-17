@@ -261,9 +261,9 @@ console.log(ground,'grounddetails');
         <div className="container">
           <div className="row">
             <div className="col-lg-8 col-md-12 col-sm-12">
-              <div>
+              <div >
                 <DatePicker
-                  className="w-100"
+                 
                   selected={selectedDate}
                   onChange={(date) => {
                     if (date) {
@@ -273,6 +273,7 @@ console.log(ground,'grounddetails');
                   }}
                   dateFormat="MMMM d, yyyy"
                   className="form-control"
+                 
                 />
               </div>
             </div>

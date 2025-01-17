@@ -32,6 +32,8 @@ body {
   flex-direction: column;
   min-height: 100vh; /* Full height of the viewport */
 }
+/************divinded line**********/
+
 
 /* Main content should expand to fill the remaining space */
 .app-main {
