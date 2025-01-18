@@ -9,6 +9,7 @@ const CreateGroundForm = () => {
     location: "",
     country: "",
     state: "",
+    city: "",
     stateDistrict: "",
     photo: null,
     description: "",
@@ -39,6 +40,7 @@ const CreateGroundForm = () => {
               stateDistrict: address.state_district || "",
               location: address.village || "",
               country: address.country || "",
+              city: address.city || "",
             });
             setLocationLoaded(true);
           } catch (error) {
@@ -69,6 +71,7 @@ const CreateGroundForm = () => {
     if (!formData.country) newErrors.country = "Country is required.";
     if (!formData.state) newErrors.state = "State is required.";
     if (!formData.stateDistrict) newErrors.stateDistrict = "State District is required.";
+    if (!formData.city) newErrors.city = "City is required."; // Validation for city
     if (!formData.description) newErrors.description = "Description is required.";
     if (!formData.photo) newErrors.photo = "Photo is required.";
 
@@ -113,6 +116,7 @@ const CreateGroundForm = () => {
           location: "",
           country: "",
           state: "",
+          city: "", 
           stateDistrict: "",
           photo: null,
           description: "",
@@ -231,6 +235,22 @@ const CreateGroundForm = () => {
           {errors.state && <div className="invalid-feedback">{errors.state}</div>}
         </div>
 
+           {/* City */}
+        <div className="col-md-6">
+          <label htmlFor="city" className="form-label">
+            City
+          </label>
+          <input
+            type="text"
+            className={`form-control ${errors.city ? "is-invalid" : ""}`}
+            id="city"
+            name="city"
+            value={formData.city}
+            onChange={handleInputChange}
+          />
+          {errors.city && <div className="invalid-feedback">{errors.city}</div>}
+        </div>
+        
         {/* State District */}
         <div className="col-md-6">
           <label htmlFor="stateDistrict" className="form-label">

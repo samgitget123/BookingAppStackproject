@@ -1,42 +1,197 @@
-import { createSlice } from '@reduxjs/toolkit';
 
+
+// citySlice.js
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+
+const baseUrl = `http://localhost:5000`;
+//const baseUrl = `https://bookingapp-r0fo.onrender.com`;
+console.log("API Base URL:", baseUrl);
 const initialState = {
   cities: [
     {
-      city: "Hyderabad",
+      city: "Mumbai",
       addresses: [
         {
-          address: "Badangpet",
-          playgrounds: [
-            { name: "Sportz Arena", slots: 5 },
-            { name: "Riverside Park Playground", slots: 3 }
-          ]
+          country: "India",
+          state: "Maharashtra",
+          district: "Mumbai Suburban",
+          area: "Bandra",
         },
         {
-          address: "456 Elm St",
-          playgrounds: [
-            { name: "Brooklyn Bridge Park Playground", slots: 4 }
-          ]
+          country: "India",
+          state: "Maharashtra",
+          district: "Mumbai Suburban",
+          area: "Kurla",
+        },
+        {
+          country: "India",
+          state: "Maharashtra",
+          district: "Mumbai Suburban",
+          area: "Andheri",
         }
       ]
     },
     {
-      city: "Los Angeles",
+      city: "Delhi",
       addresses: [
         {
-          address: "789 Sunset Blvd",
-          playgrounds: [
-            { name: "Griffith Park Playground", slots: 6 }
-          ]
+          country: "India",
+          state: "Delhi",
+          district: "New Delhi",
+          area: "Connaught Place",
+        },
+        {
+          country: "India",
+          state: "Delhi",
+          district: "South Delhi",
+          area: "Hauz Khas",
+        },
+        {
+          country: "India",
+          state: "Delhi",
+          district: "North Delhi",
+          area: "Karol Bagh",
         }
       ]
-    }
+    },
+    {
+      city: "Bengaluru",
+      addresses: [
+        {
+          country: "India",
+          state: "Karnataka",
+          district: "Bengaluru Urban",
+          area: "Whitefield",
+        },
+        {
+          country: "India",
+          state: "Karnataka",
+          district: "Bengaluru Urban",
+          area: "Koramangala",
+        },
+        {
+          country: "India",
+          state: "Karnataka",
+          district: "Bengaluru Urban",
+          area: "Indiranagar",
+        }
+      ]
+    },
+    {
+      city: "Chennai",
+      addresses: [
+        {
+          country: "India",
+          state: "Tamil Nadu",
+          district: "Chennai",
+          area: "T. Nagar",
+        },
+        {
+          country: "India",
+          state: "Tamil Nadu",
+          district: "Chennai",
+          area: "Adyar",
+        },
+        {
+          country: "India",
+          state: "Tamil Nadu",
+          district: "Chennai",
+          area: "Velachery",
+        }
+      ]
+    },
+    {
+      city: "Hyderabad",
+      addresses: [
+        {
+          country: "India",
+          state: "Telangana",
+          district: "Hyderabad",
+          area: "Banjara Hills",
+        },
+        {
+          country: "India",
+          state: "Telangana",
+          district: "Hyderabad",
+          area: "Jubilee Hills",
+        },
+        {
+          country: "India",
+          state: "Telangana",
+          district: "Hyderabad",
+          area: "Gachibowli",
+        }
+      ]
+    },
+    {
+      city: "Kolkata",
+      addresses: [
+        {
+          country: "India",
+          state: "West Bengal",
+          district: "Kolkata",
+          area: "Park Street",
+        },
+        {
+          country: "India",
+          state: "West Bengal",
+          district: "Kolkata",
+          area: "Salt Lake",
+        },
+        {
+          country: "India",
+          state: "West Bengal",
+          district: "Kolkata",
+          area: "Howrah",
+        }
+      ]
+    },
+    {
+      city: "Pune",
+      addresses: [
+        {
+          country: "India",
+          state: "Maharashtra",
+          district: "Pune",
+          area: "Kothrud",
+        },
+        {
+          country: "India",
+          state: "Maharashtra",
+          district: "Pune",
+          area: "Viman Nagar",
+        },
+        {
+          country: "India",
+          state: "Maharashtra",
+          district: "Pune",
+          area: "Hinjewadi",
+        }
+      ]
+    },
+    // Add more cities as needed
   ],
   selectedCity: '',
-  selectedAddress: '',
+  selectedArea: '',
   filteredPlaygrounds: [],
-  searchQuery: ''
+  searchQuery: '',
+  loading: false, // Add loading state
+  error: null,    // Add error state
 };
+
+export const fetchPlaygrounds = createAsyncThunk(
+  'city/fetchPlaygrounds',
+  async (location, thunkAPI) => {
+    const response = await fetch(`${baseUrl}/api/ground?location=${location}`);
+  console.log(response, 'showgroundsapi');
+    if (!response.ok) {
+      throw new Error('Failed to fetch playgrounds');
+    }
+    const data = await response.json();
+    return data;
+  }
+);
+
 
 const citySlice = createSlice({
   name: 'city',
@@ -44,52 +199,49 @@ const citySlice = createSlice({
   reducers: {
     selectCity: (state, action) => {
       state.selectedCity = action.payload;
-      state.selectedAddress = '';
-      state.filteredPlaygrounds = [];
+      state.selectedArea = ''; // Reset area selection
+      state.searchQuery = '';
+      state.filteredPlaygrounds = []; // Clear playgrounds to refresh
     },
-    selectAddress: (state, action) => {
-      const address = action.payload;
-      state.selectedAddress = address;
+    selectArea: (state, action) => {
+      state.selectedArea = action.payload;
       const cityData = state.cities.find(city => city.city === state.selectedCity);
       if (cityData) {
-        const addressData = cityData.addresses.find(addr => addr.address === address);
-        if (addressData) {
-          state.filteredPlaygrounds = addressData.playgrounds;
-        } else {
-          state.filteredPlaygrounds = [];
-        }
+        const selectedAddresses = cityData.addresses.filter(addr => addr.area === state.selectedArea);
+        state.filteredPlaygrounds = selectedAddresses.flatMap(addr => addr.playgrounds);
+      } else {
+        state.filteredPlaygrounds = [];
       }
     },
     setSearchQuery: (state, action) => {
-      console.log("Updating Search Query:", action.payload); // Debug log
       state.searchQuery = action.payload;
-      if (state.selectedCity) {
-        const cityData = state.cities.find(city => city.city === state.selectedCity);
-        if (cityData) {
-          let playgrounds = [];
-          cityData.addresses.forEach(addr => {
-            playgrounds = playgrounds.concat(addr.playgrounds);
-          });
-          state.filteredPlaygrounds = playgrounds.filter(pg =>
-            pg.name.toLowerCase().includes(state.searchQuery.toLowerCase())
-          );
-        }
-      } else {
-        // If no city is selected, search through all cities and addresses
-        let allPlaygrounds = [];
-        state.cities.forEach(city => {
-          city.addresses.forEach(addr => {
-            allPlaygrounds = allPlaygrounds.concat(addr.playgrounds);
-          });
-        });
+      const cityData = state.cities.find(city => city.city === state.selectedCity);
+      if (cityData) {
+        const allPlaygrounds = cityData.addresses.flatMap(addr => addr.playgrounds);
         state.filteredPlaygrounds = allPlaygrounds.filter(pg =>
           pg.name.toLowerCase().includes(state.searchQuery.toLowerCase())
         );
+      } else {
+        state.filteredPlaygrounds = [];
       }
-      console.log("Filtered Playgrounds:", state.filteredPlaygrounds); // Debug log
-    }
+    },
+  },
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchPlaygrounds.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPlaygrounds.fulfilled, (state, action) => {
+        state.loading = false;
+        state.filteredPlaygrounds = action.payload;
+      })
+      .addCase(fetchPlaygrounds.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+      });
   }
 });
 
-export const { selectCity, selectAddress, setSearchQuery } = citySlice.actions;
+export const { selectCity, selectArea, setSearchQuery } = citySlice.actions;
 export default citySlice.reducer;

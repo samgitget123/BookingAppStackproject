@@ -180,13 +180,19 @@ const initialState = {
 };
 
 export const fetchPlaygrounds = createAsyncThunk(
-  'city/fetchPlaygrounds',
-  async (location, thunkAPI) => {
-    const response = await fetch(`${baseUrl}/api/ground?location=${location}`);
-  console.log(response, 'showgroundsapi');
+  "city/fetchPlaygrounds",
+  async ({ City, State }, thunkAPI) => {
+    console.log(City, State, "reduxlocations");
+
+    const response = await fetch(
+      `${baseUrl}/api/ground?location=&state=${State}&city=${City?City:""}`
+    );
+    console.log(response, "showgroundsapi");
+
     if (!response.ok) {
-      throw new Error('Failed to fetch playgrounds');
+      throw new Error("Failed to fetch playgrounds");
     }
+
     const data = await response.json();
     return data;
   }

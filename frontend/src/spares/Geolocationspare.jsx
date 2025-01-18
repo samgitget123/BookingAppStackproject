@@ -59,8 +59,7 @@ const Getlocations = ({ onCityFetched, disabled }) => {
       onCityFetched({state, district, area});
 
       // Optionally dispatch fetchPlaygrounds if you need it
-      console.log(state, 'getlocationstate');
-       dispatch(fetchPlaygrounds({ State: state }));
+      dispatch(fetchPlaygrounds(area));
     } catch (error) {
       console.error("Error fetching city data:", error);
       setErrorApi("Unable to retrieve city data");

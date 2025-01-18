@@ -22,9 +22,13 @@ const groundSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
+    city: { 
+      type: String,
+      required: true, 
+    },
     stateDistrict: {
       type: String,
-      required: false,  // Make sure this is optional if you want to leave it empty
+      required: false,  
     },
     description: {
       type: String,
