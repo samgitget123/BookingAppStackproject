@@ -1,16 +1,12 @@
 import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
-
 import cors from 'cors';
 import connectDB from './config/db.js';
 //const groundRoutes = require('./routes/groundRoutes'); 
 import groundRoutes from './routes/groundRoutes.js';
 import Booking from './routes/bookingRoutes.js';
-const port = process.env.PORT || 500;
 import { notfound , errorHandler } from './middleware/errorMiddleware.js';
-//import TestData from './Data/TestData.js';
-// Import path and define __dirname for ES modules
 import path from 'path';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
@@ -20,10 +16,9 @@ const app = express();
 // app.use("/uploads", express.static(path.join(__dirname, 'uploads')));
 app.use(express.json());
 app.use(cors()); // Enable CORS for all routes
+const port = process.env.PORT || 5000;
 connectDB();
 
-// Serve uploaded images
-//app.use("/uploads", express.static(path.join(__dirname, '../uploads')));
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 //Ground Routes
