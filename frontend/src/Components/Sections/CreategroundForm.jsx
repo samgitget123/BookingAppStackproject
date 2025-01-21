@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useBaseUrl } from "../../Contexts/BaseUrlContext";
-
+import { indianCities } from "../Data/CityData";
 const CreateGroundForm = () => {
   const { baseUrl } = useBaseUrl();
   const [formData, setFormData] = useState({
@@ -25,13 +25,13 @@ const CreateGroundForm = () => {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords;
-          
+
           try {
             // Using OpenStreetMap API (or any other API you prefer) for reverse geocoding
             const res = await axios.get(
               `https://nominatim.openstreetmap.org/reverse?lat=${latitude}&lon=${longitude}&format=json&addressdetails=1`
             );
-            
+
             const address = res.data.address;
             // Setting the location details in form state
             setFormData({
@@ -90,7 +90,7 @@ const CreateGroundForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     if (validate()) {
       setIsLoading(true);
       const formDataToSubmit = new FormData();
@@ -116,7 +116,7 @@ const CreateGroundForm = () => {
           location: "",
           country: "",
           state: "",
-          city: "", 
+          city: "",
           stateDistrict: "",
           photo: null,
           description: "",
@@ -150,7 +150,27 @@ const CreateGroundForm = () => {
           />
           {errors.name && <div className="invalid-feedback">{errors.name}</div>}
         </div>
+        <div className="col-md-6">
+          <label htmlFor="city" className="form-label">
+            City
+          </label>
+          <select
+            className={`form-control ${errors.city ? "is-invalid" : ""}`}
+            id="city"
+            name="city"
+            value={formData.city}
+            onChange={handleInputChange}
+          >
+            <option value="">Select a city</option>
+            {indianCities.map((city, index) => (
+              <option key={index} value={city}>
+                {city}
+              </option>
+            ))}
+          </select>
 
+          {errors.city && <div className="invalid-feedback">{errors.city}</div>}
+        </div>
         {/* Photo */}
         <div className="col-md-6">
           <label htmlFor="photo" className="form-label">
@@ -235,22 +255,8 @@ const CreateGroundForm = () => {
           {errors.state && <div className="invalid-feedback">{errors.state}</div>}
         </div>
 
-           {/* City */}
-        <div className="col-md-6">
-          <label htmlFor="city" className="form-label">
-            City
-          </label>
-          <input
-            type="text"
-            className={`form-control ${errors.city ? "is-invalid" : ""}`}
-            id="city"
-            name="city"
-            value={formData.city}
-            onChange={handleInputChange}
-          />
-          {errors.city && <div className="invalid-feedback">{errors.city}</div>}
-        </div>
-        
+
+
         {/* State District */}
         <div className="col-md-6">
           <label htmlFor="stateDistrict" className="form-label">
@@ -270,8 +276,8 @@ const CreateGroundForm = () => {
         </div>
 
         {/* Submit Button */}
-        <div className="col-12 text-center">
-          <button type="submit" className="btn btn-primary" disabled={isLoading}>
+        <div className="col-12 text-center my-3">
+          <button type="submit" className="btn btn-lg btn-primary w-100" disabled={isLoading}>
             {isLoading ? "Submitting..." : "Submit"}
           </button>
         </div>

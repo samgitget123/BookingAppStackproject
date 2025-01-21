@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 const Payment = () => {
   const location = useLocation();
   const paymentdata = location.state; // Retrieve data from the state
-  console.log(paymentdata.data, 'paymentdata');
+  console.log(paymentdata.data, "paymentdata");
   const selectedSlots = paymentdata.data.slots;
 
   // Function to format a single slot
@@ -41,7 +41,7 @@ const Payment = () => {
   return (
     <section className="d-flex justify-content-center">
       <div
-        className="container p-3 mt-3 rounded overflow-auto"
+        className="container p-3 mt-md-3 rounded overflow-auto"
         style={{
           backgroundColor: "#006849",
           maxHeight: "90vh", // Optional: restrict height for mobile
@@ -52,6 +52,18 @@ const Payment = () => {
             <section className="text-white">
               <h2>Payment Overview</h2>
               <p>Make secure and fast payments for your ground bookings.</p>
+              <p>
+                <strong>Ground Name:</strong> {paymentdata.data.ground_id}
+              </p>
+              <p>
+                <strong>Date:</strong> {paymentdata.data.date}
+              </p>
+              <p>
+                <strong>Slot:</strong> {formatslot(paymentdata.data.slots)}
+              </p>
+              <p>
+                <strong>Total Price:</strong> ₹{paymentdata.data.price}
+              </p>
             </section>
           </div>
           <div className="col-lg-7 col-md-12">
@@ -65,77 +77,108 @@ const Payment = () => {
                 }}
               >
                 <div className="card-header text-center bg-secondary text-white">
-                  <h3>Payment Details</h3>
+                  <h3>Payment Options</h3>
                 </div>
                 <div className="card-body">
-                  <h5 className="text-center text-muted">Ground Booking</h5>
-                  <div className="mb-2">
-                    <p>
-                      <strong>Ground Name:</strong>{" "}
-                      {paymentdata.data.ground_id}
-                    </p>
-                    <p>
-                      <strong>Date:</strong> {paymentdata.data.date}
-                    </p>
-                    <p>
-                      <strong>Slot:</strong>{" "}
-                      {formatslot(paymentdata.data.slots)}
-                    </p>
-                    <p>
-                      <strong>Total Price:</strong> ₹{paymentdata.data.price}
-                    </p>
-                  </div>
-                  <form>
-                    <div className="form-group mb-2">
-                      <label htmlFor="cardNumber">Card Number</label>
-                      <input
-                        type="text"
-                        id="cardNumber"
-                        className="form-control"
-                        placeholder="Enter your card number"
-                        required
-                      />
+                  <h5 className="text-center text-muted mb-3">
+                    Choose a payment method
+                  </h5>
+                  <div className="mb-4">
+                    <h6 className="text-muted">UPI Apps</h6>
+                    <div className="d-flex justify-content-between">
+                      <button className="btn btn-light w-100 mx-1">
+                        <img
+                          src="https://upload.wikimedia.org/wikipedia/en/thumb/8/89/PhonePe-logo.png/1200px-PhonePe-logo.png"
+                          alt="PhonePe"
+                          style={{ width: "50px" }}
+                        />
+                        <br />
+                        PhonePe
+                      </button>
+                      <button className="btn btn-light w-100 mx-1">
+                        <img
+                          src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Google_Pay_%28GPay%29_Logo.svg/1200px-Google_Pay_%28GPay%29_Logo.svg.png"
+                          alt="Google Pay"
+                          style={{ width: "50px" }}
+                        />
+                        <br />
+                        Google Pay
+                      </button>
+                      <button className="btn btn-light w-100 mx-1">
+                        <img
+                          src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3e/Paytm_logo.png/1200px-Paytm_logo.png"
+                          alt="Paytm"
+                          style={{ width: "50px" }}
+                        />
+                        <br />
+                        Paytm
+                      </button>
                     </div>
-
-                    <div className="row mb-2">
-                      <div className="col-md-6">
-                        <label htmlFor="expiryDate">Expiry Date</label>
+                  </div>
+                  <hr />
+                  <div className="mb-4">
+                    <h6 className="text-muted">Debit/Credit Card</h6>
+                    <form>
+                      <div className="form-group mb-2">
+                        <label htmlFor="cardNumber">Card Number</label>
                         <input
                           type="text"
-                          id="expiryDate"
+                          id="cardNumber"
                           className="form-control"
-                          placeholder="MM/YY"
+                          placeholder="Enter your card number"
                           required
                         />
                       </div>
-                      <div className="col-md-6">
-                        <label htmlFor="cvv">CVV</label>
+
+                      <div className="row mb-2">
+                        <div className="col-md-6">
+                          <label htmlFor="expiryDate">Expiry Date</label>
+                          <input
+                            type="text"
+                            id="expiryDate"
+                            className="form-control"
+                            placeholder="MM/YY"
+                            required
+                          />
+                        </div>
+                        <div className="col-md-6">
+                          <label htmlFor="cvv">CVV</label>
+                          <input
+                            type="password"
+                            id="cvv"
+                            className="form-control"
+                            placeholder="123"
+                            maxLength="3"
+                            required
+                          />
+                        </div>
+                      </div>
+
+                      <div className="form-group mb-2">
+                        <label htmlFor="cardName">Cardholder Name</label>
                         <input
-                          type="password"
-                          id="cvv"
+                          type="text"
+                          id="cardName"
                           className="form-control"
-                          placeholder="123"
-                          maxLength="3"
+                          placeholder="Enter your name"
                           required
                         />
                       </div>
-                    </div>
 
-                    <div className="form-group mb-2">
-                      <label htmlFor="cardName">Cardholder Name</label>
-                      <input
-                        type="text"
-                        id="cardName"
-                        className="form-control"
-                        placeholder="Enter your name"
-                        required
-                      />
-                    </div>
-
-                    <button type="submit" className="btn btn-primary w-100">
-                      Pay ₹{paymentdata.data.price}
-                    </button>
-                  </form>
+                      <button type="submit" className="btn btn-primary w-100">
+                        Pay ₹{paymentdata.data.price}
+                      </button>
+                    </form>
+                  </div>
+                  <hr />
+                  <div className="text-center">
+                    <p className="text-muted">Secure payments with 256-bit SSL</p>
+                    <img
+                      src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/48/SSL_certificate_logo.svg/1280px-SSL_certificate_logo.svg.png"
+                      alt="SSL"
+                      style={{ width: "80px" }}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

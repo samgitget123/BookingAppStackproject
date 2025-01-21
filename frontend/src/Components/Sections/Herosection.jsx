@@ -10,6 +10,8 @@ import Carousels from "./promotions/Carousels";
 import Getlocations from "./locations/Getlocations";
 import TypingText from "./animations/Typingtext";
 import { indianCities } from "../Data/CityData";
+import { indianStates } from "../Data/CityData";
+import { FaMapMarkerAlt } from "react-icons/fa";
 const Herosection = () => {
   const dispatch = useDispatch();
   const { cities, selectedCity, selectedArea, loading, error } = useSelector(
@@ -114,13 +116,31 @@ const Herosection = () => {
                   {/* user state location */}
                   <form role="search" onSubmit={(e) => e.preventDefault()}>
                     {/* City Dropdown */}
-                    <input
+                         <div className="d-flex justify-content-center">
+                                         <select
+                                          className="form-control my-3 w-70"
+                                          value={city} // Set value to 'place' state
+                                          onChange={handlecityChange} // Update 'place' when the user selects a city
+                                          style={{borderRadius:"20px",fontWeight:"bold"}}
+                                        >
+                                          <option value="">{city}</option>
+                                          {/* {indianStates.map((state, index) => (
+                                            <option key={index} value={
+                                              state
+                                            }>
+                                              {state}
+                                            </option>
+                                          ))} */}
+                                        </select>
+                                        <FaMapMarkerAlt style={{fontSize:"50px" , color:"#00EE64"}}/>
+                                       </div>
+                    {/* <input
                       type="text"
                       className="form-control my-3"
                       value={city}  // Set value to 'place' state
                       placeholder="User Location"
                       list="cities-list" // This provides suggestions as users type
-                    />
+                    /> */}
 
 
                     {/* Area Dropdown */}
