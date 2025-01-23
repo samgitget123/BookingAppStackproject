@@ -6,6 +6,7 @@ import connectDB from './config/db.js';
 //const groundRoutes = require('./routes/groundRoutes'); 
 import groundRoutes from './routes/groundRoutes.js';
 import Booking from './routes/bookingRoutes.js';
+import Payment from './routes/paymentRoutes.js'
 import { notfound , errorHandler } from './middleware/errorMiddleware.js';
 import path from 'path';
 import { fileURLToPath } from 'url';
@@ -26,6 +27,9 @@ app.use('/api/ground' , groundRoutes)
 
 //Booking Route
 app.use('/api/booking' , Booking);
+
+//payment Routes
+app.use('/api/payment', Payment);
 
 //make it for build
 if(process.env.NODE_ENV === 'production'){

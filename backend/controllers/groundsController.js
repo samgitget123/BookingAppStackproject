@@ -71,57 +71,107 @@ const createGround = asynHandler(async (req, res) => {
     }
 });
 
+// const getGroundsByLocation = asynHandler(async (req, res) => {
+//     try {
+//         const { location, state, city } = req.query; // Get query parameters
+
+//         // Build query object dynamically
+//         const query = {};
+
+//         // Check if 'location' is provided, and add it to the query object if it is
+//         if (location) query.location = { $regex: new RegExp(location, "i") }; // Case-insensitive
+        
+//         // Check if 'state' is provided, and add it to the query object
+//         if (state) query.state = { $regex: new RegExp(state, "i") }; // Case-insensitive
+        
+//         // Check if 'city' is provided, and add it to the query object
+//         if (city) query.city = { $regex: new RegExp(city, "i") }; // Case-insensitive
+
+//         // Fetch grounds based on the query
+//         const grounds = await Ground.find(query);
+
+//         if (!grounds || grounds.length === 0) {
+//             if (state && city) {
+//                 // If both state and city are provided and no results are found
+//                 res.status(404).json({ message: "No grounds found for the specified state and city combination" });
+//             } else if (state) {
+//                 // If only state is provided and no results are found
+//                 res.status(404).json({ message: "No grounds found for the specified state" });
+//             } else {
+//                 // If no grounds are found for any reason
+//                 res.status(404).json({ message: "No grounds found for the specified filters" });
+//             }
+//             return;
+//         }
+
+//         // Map response to match the required format
+//         const response = grounds.map((ground) => ({
+//             ground_id: ground.ground_id,
+//             data: {
+//                 name: ground.name,
+//                 location: ground.location,
+//                 city: ground.city, // Include city in the response
+//                 photo: ground.photo,
+//                 description: ground.description,
+//             },
+//         }));
+
+//         res.json(response);
+//     } catch (err) {
+//         res.status(500).json({ message: "Server Error", error: err.message });
+//     }
+// });
+
 const getGroundsByLocation = asynHandler(async (req, res) => {
     try {
         const { location, state, city } = req.query; // Get query parameters
 
-        // Build query object dynamically
-        const query = {};
+        // Validate the `state` parameter
+        if (!state || state.trim() === '') {
+            return res.status(400).json({ message: "Please select a valid state" });
+        }
 
-        // Check if 'location' is provided, and add it to the query object if it is
-        if (location) query.location = { $regex: new RegExp(location, "i") }; // Case-insensitive
-        
-        // Check if 'state' is provided, and add it to the query object
-        if (state) query.state = { $regex: new RegExp(state, "i") }; // Case-insensitive
-        
-        // Check if 'city' is provided, and add it to the query object
-        if (city) query.city = { $regex: new RegExp(city, "i") }; // Case-insensitive
+        // Build query object dynamically based on provided filters
+        const query = {};
+        if (location) query.location = { $regex: new RegExp(location, "i") }; // Case-insensitive regex for location
+        if (state) query.state = { $regex: new RegExp(state, "i") }; // Case-insensitive regex for state
+        if (city) query.city = { $regex: new RegExp(city, "i") }; // Case-insensitive regex for city
 
         // Fetch grounds based on the query
         const grounds = await Ground.find(query);
 
+        // Handle cases where no grounds are found
         if (!grounds || grounds.length === 0) {
+            let message = "No grounds found";
             if (state && city) {
-                // If both state and city are provided and no results are found
-                res.status(404).json({ message: "No grounds found for the specified state and city combination" });
+                message = "No grounds found for the specified state and city combination";
             } else if (state) {
-                // If only state is provided and no results are found
-                res.status(404).json({ message: "No grounds found for the specified state" });
-            } else {
-                // If no grounds are found for any reason
-                res.status(404).json({ message: "No grounds found for the specified filters" });
+                message = "No grounds found for the specified state";
+            } else if (city) {
+                message = "No grounds found for the specified city";
             }
-            return;
+            return res.status(404).json({ message });
         }
 
-        // Map response to match the required format
+        // Format the response
         const response = grounds.map((ground) => ({
             ground_id: ground.ground_id,
             data: {
                 name: ground.name,
                 location: ground.location,
-                city: ground.city, // Include city in the response
+                city: ground.city,
                 photo: ground.photo,
                 description: ground.description,
             },
         }));
 
-        res.json(response);
+        // Send the response
+        res.status(200).json(response);
     } catch (err) {
+        // Catch and send server errors
         res.status(500).json({ message: "Server Error", error: err.message });
     }
 });
-
 
 const getGroundsByIdandDate = asynHandler(async(req , res)=>{
      const { ground_id } = req.params;

@@ -194,6 +194,7 @@ export const fetchPlaygrounds = createAsyncThunk(
     }
 
     const data = await response.json();
+    console.log(data, 'apidata');
     return data;
   }
 );
@@ -211,6 +212,7 @@ const citySlice = createSlice({
     },
     selectArea: (state, action) => {
       state.selectedArea = action.payload;
+      console.log(state.selectedArea ,'cityinredux')
       const cityData = state.cities.find(city => city.city === state.selectedCity);
       if (cityData) {
         const selectedAddresses = cityData.addresses.filter(addr => addr.area === state.selectedArea);

@@ -13,9 +13,10 @@ const Showgrounds = ({ selectedCity }) => {
   const dispatch = useDispatch();
 
   const { filteredPlaygrounds, loading, error } = useSelector((state) => state.city || {});
-
+console.log(filteredPlaygrounds,'filteredPlaygrounds')
   useEffect(() => {
     if (selectedCity) {
+      console.log(selectedCity, 'cityinshowgrounds')
       dispatch(fetchPlaygrounds(selectedCity)); // Fetch playgrounds based on the selected city
     }
   }, [dispatch, selectedCity]);

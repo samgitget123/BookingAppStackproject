@@ -77,3 +77,26 @@ export const indianStates = [
   "Puducherry"
 ];
 
+export const telanganaCities = [
+  "Hyderabad",
+  "Warangal",
+  "Nizamabad",
+  "Karimnagar",
+  "Khammam",
+  "Mahabubnagar",
+  "Ramagundam",
+  "Adilabad",
+  "Siddipet",
+  "Mancherial",
+  "Suryapet",
+  "Miryalaguda",
+  "Nalgonda",
+  "Medak",
+  "Zaheerabad",
+  "Bodhan",
+  "Vikarabad",
+  "Jangaon",
+  "Kamareddy"
+];
+
+

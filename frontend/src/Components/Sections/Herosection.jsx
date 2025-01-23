@@ -9,84 +9,52 @@ import brandlogo from "../../Images/brandlogonobg.png";
 import Carousels from "./promotions/Carousels";
 import Getlocations from "./locations/Getlocations";
 import TypingText from "./animations/Typingtext";
-import { indianCities } from "../Data/CityData";
-import { indianStates } from "../Data/CityData";
+import { telanganaCities } from "../Data/CityData";
 import { FaMapMarkerAlt } from "react-icons/fa";
+
 const Herosection = () => {
   const dispatch = useDispatch();
-  const { cities, selectedCity, selectedArea, loading, error } = useSelector(
-    (state) => state.city
-  );
-
-  const [city, setCity] = useState(selectedCity || "");  //state
-  const [area, setArea] = useState(selectedArea || "");
-  const [place, setPlace] = useState("");
+  const { selectedCity, loading, error } = useSelector((state) => state.city);
+console.log(selectedCity, 'selectedcityredux')
+  const [city, setCity] = useState(""); // Default state
+  const [place, setPlace] = useState(""); // Default city
   const [isGetLocationDisabled, setIsGetLocationDisabled] = useState(false);
-  console.log(place, city ,  'stateLocation');
-  //dispatch(fetchPlaygrounds({State: city , City: place}));
-  // Handle city and area fetched from Getlocations component
+
+  // Function to handle state changes
+  const handleStateChange = (event) => {
+    const selectedState = event.target.value;
+    setCity(selectedState);
+    setPlace(""); // Reset city when state changes
+   
+    // Dispatch data for the entire state
+    dispatch(fetchPlaygrounds({ State: selectedState, City: "" }));
+  };
+
+  // Function to handle city changes
+  const handleCityChange = (event) => {
+    const selectedCity = event.target.value;
+    setPlace(selectedCity);
+
+    // Dispatch data based on state and selected city
+    dispatch(fetchPlaygrounds({ State: city, City: selectedCity }));
+  };
+
+  // Handle data fetched from Getlocations
   const handleCityFetched = ({ state, district, area }) => {
-    console.log(state, district, area, "locations");
-
-    // Update local state
     setCity(state);
-    setArea(area);
+    setPlace(district);
+
+    // Dispatch data for the detected city
     dispatch(fetchPlaygrounds({ State: state, City: district }));
-    // Update Redux store
-    //dispatch(selectCity(state)); // Set city in Redux store
-   // dispatch(selectArea(area)); // Set area in Redux store
-
-    // Fetch playgrounds for the selected city
-    console.log(state, place, 'both');
-    // dispatch(fetchPlaygrounds({State: state , City: place}));
-
-    // Disable the Get Location button
     setIsGetLocationDisabled(true);
   };
 
-  // const handleStateChange = (event) => {
-  //   const selectedState = event.target.value;
-  //   console.log(selectedState, 'selectedState')
-  //   // Update local and global state
-  //   setCity(selectedState);
-  //   console.log(selectedState, 'userstate');
-  //   dispatch(selectCity(selectedState));
-
-  //   // Clear the area when the city changes
-  //   setArea("");
-  //   dispatch(selectArea(""));
-
-  //   // Fetch playgrounds for the selected city
-  //   if (selectedState) {
-  //     dispatch(fetchPlaygrounds(selectedState));
-  //     setIsGetLocationDisabled(true); // Disable Get Location button
-  //   }
-  // };
-  const handlecityChange = (event) => {
-    const selectedCity = event.target.value;
-    setPlace(selectedCity); 
-    if (selectedCity) {
-      dispatch(fetchPlaygrounds({ State: city, City: selectedCity }));
-    }
-   // dispatch(selectCity(selectedCity));
-    console.log(selectedCity, 'selectedCity');
-   // This will set the 'place' state to the selected city
-  }
-  console.log(place, 'place');
-  const handleAreaChange = (event) => {
-    const selectedArea = event.target.value;
-
-    // Update local and global state
-    setArea(selectedArea);
-   // dispatch(selectArea(selectedArea));
-  };
-
-  // Re-enable the Get Location button if the city is cleared
+  // Re-enable "Get Location" button when state is reset
   useEffect(() => {
-    if (!selectedCity) {
+    if (!city) {
       setIsGetLocationDisabled(false);
     }
-  }, [selectedCity]);
+  }, [city]);
 
   return (
     <>
@@ -113,44 +81,30 @@ const Herosection = () => {
                     />
                   </div>
                   <TypingText />
-                  {/* user state location */}
+
+                  {/* User State and City Dropdowns */}
                   <form role="search" onSubmit={(e) => e.preventDefault()}>
-                    {/* City Dropdown */}
-                         <div className="d-flex justify-content-center">
-                                         <select
-                                          className="form-control my-3 w-70"
-                                          value={city} // Set value to 'place' state
-                                          onChange={handlecityChange} // Update 'place' when the user selects a city
-                                          style={{borderRadius:"20px",fontWeight:"bold"}}
-                                        >
-                                          <option value="">{city}</option>
-                                          {/* {indianStates.map((state, index) => (
-                                            <option key={index} value={
-                                              state
-                                            }>
-                                              {state}
-                                            </option>
-                                          ))} */}
-                                        </select>
-                                        <FaMapMarkerAlt style={{fontSize:"50px" , color:"#00EE64"}}/>
-                                       </div>
-                    {/* <input
-                      type="text"
-                      className="form-control my-3"
-                      value={city}  // Set value to 'place' state
-                      placeholder="User Location"
-                      list="cities-list" // This provides suggestions as users type
-                    /> */}
-
-
-                    {/* Area Dropdown */}
+                    {/* State Dropdown */}
                     <select
                       className="form-control my-3"
-                      value={place} // Set value to 'place' state
-                      onChange={handlecityChange} // Update 'place' when the user selects a city
+                      value={city}
+                      onChange={handleStateChange}
+                      style={{ borderRadius: "20px", fontWeight: "bold" }}
+                    >
+                      <option value="Telangana">Telangana</option>
+                      <option value="Andhra Pradesh">Andhra Pradesh</option>
+                      <option value="Karnataka">Karnataka</option>
+                    </select>
+
+                    {/* City Dropdown */}
+                    <select
+                      className="form-control my-3"
+                      value={place}
+                      onChange={handleCityChange}
+                      style={{ borderRadius: "20px"}}
                     >
                       <option value="">Select City</option>
-                      {indianCities.map((city, index) => (
+                      {telanganaCities.map((city, index) => (
                         <option key={index} value={city}>
                           {city}
                         </option>
@@ -177,6 +131,9 @@ const Herosection = () => {
             </div>
           </div>
         </div>
+      </section>
+      <section>
+        
       </section>
     </>
   );

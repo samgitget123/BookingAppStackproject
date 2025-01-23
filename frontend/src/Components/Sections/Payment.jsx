@@ -1,12 +1,14 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
-
+import { useBaseUrl } from "../../Contexts/BaseUrlContext";
+import axios from "axios";
 const Payment = () => {
   const location = useLocation();
   const paymentdata = location.state; // Retrieve data from the state
-  console.log(paymentdata.data, "paymentdata");
+  const minpay = paymentdata.data.price * 25/100
+  console.log(minpay , "paymentdata");
   const selectedSlots = paymentdata.data.slots;
-
+  const { baseUrl } = useBaseUrl();
   // Function to format a single slot
   const formatslot = (selectedSlots) => {
     if (!Array.isArray(selectedSlots) || selectedSlots.length === 0) return ""; // Ensure selectedSlots is a valid array
@@ -37,7 +39,52 @@ const Payment = () => {
     // Return the formatted time range as one value
     return `${startTime} - ${endTime}`;
   };
+////payment handler////
+const handlePayment = async () => {
+  try {
+    // Create order on the backend
+    const { data: order } = await axios.post(`${baseUrl}/api/payment/create-order`, {
+      amount: minpay,
+      currency: "INR",
+    });
 
+    const options = {
+      key: "rzp_test_kmCGsajN35PCCh", // Replace with your Razorpay Key ID
+      amount: order.amount,
+      currency: order.currency,
+      name: "Ground Booking",
+      description: "Payment for ground booking",
+      order_id: order.id,
+      handler: async (response) => {
+        const verification = await axios.post(`${baseUrl}/api/payment/verify-payment`, {
+          razorpay_order_id: response.razorpay_order_id,
+          razorpay_payment_id: response.razorpay_payment_id,
+          razorpay_signature: response.razorpay_signature,
+        });
+
+        if (verification.data.success) {
+          alert("Payment Successful!");
+        } else {
+          alert("Payment Verification Failed!");
+        }
+      },
+      prefill: {
+        name: "User Name", // Replace with actual user name
+        email: "user@example.com", // Replace with actual user email
+        contact: "9876543210", // Replace with actual user contact number
+      },
+      theme: {
+        color: "#006849", // Your preferred color
+      },
+    };
+
+    const razorpay = new window.Razorpay(options);
+    razorpay.open();
+  } catch (error) {
+    console.error("Error during payment:", error);
+    alert("Something went wrong. Please try again.");
+  }
+};
   return (
     <section className="d-flex justify-content-center">
       <div
@@ -62,7 +109,10 @@ const Payment = () => {
                 <strong>Slot:</strong> {formatslot(paymentdata.data.slots)}
               </p>
               <p>
-                <strong>Total Price:</strong> ₹{paymentdata.data.price}
+                <strong>Total Price:</strong> ₹ {paymentdata.data.price}
+              </p>
+              <p>
+                <strong>Amount to be Paid as Advance: </strong> ₹ {minpay}
               </p>
             </section>
           </div>
@@ -165,8 +215,8 @@ const Payment = () => {
                         />
                       </div>
 
-                      <button type="submit" className="btn btn-primary w-100">
-                        Pay ₹{paymentdata.data.price}
+                      <button type="submit" className="btn btn-primary w-100" onClick={handlePayment}>
+                        Pay ₹{minpay}
                       </button>
                     </form>
                   </div>
