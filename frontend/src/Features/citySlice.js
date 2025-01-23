@@ -3,7 +3,7 @@
 // citySlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
-const baseUrl = `http://localhost:5000`;
+const baseUrl = `https://bookingapp-r0fo.onrender.com`;
 //const baseUrl = `https://bookingapp-r0fo.onrender.com`;
 console.log("API Base URL:", baseUrl);
 const initialState = {

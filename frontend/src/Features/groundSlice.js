@@ -2,7 +2,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { useBaseUrl } from '../Contexts/BaseUrlContext';
-const baseUrl = `http://localhost:5000`;
+const baseUrl = `https://bookingapp-r0fo.onrender.com`;
 //const baseUrl = `https://bookingapp-r0fo.onrender.com`;
 const initialState = {
   ground: null,
