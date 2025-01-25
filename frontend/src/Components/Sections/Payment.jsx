@@ -1,6 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { useBaseUrl } from "../../Contexts/BaseUrlContext";
+import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 const Payment = () => {
   const location = useLocation();
@@ -43,9 +44,14 @@ const Payment = () => {
 const handlePayment = async () => {
   try {
     // Create order on the backend
+    const bookingId = uuidv4(); // Generate a unique booking ID
     const { data: order } = await axios.post(`${baseUrl}/api/payment/create-order`, {
       amount: minpay,
       currency: "INR",
+      receipt: "1", 
+      ground_id: paymentdata.data.ground_id, 
+      booking_id: bookingId,
+
     });
 
     const options = {

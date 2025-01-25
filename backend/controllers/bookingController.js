@@ -70,6 +70,7 @@ const bookingGround =  asyncHandler(async (req, res) => {
       slots,
       comboPack,
       book: { booking_id, price: totalPrice },
+      paymentStatus: "pending",
     });
     await booking.save();
 

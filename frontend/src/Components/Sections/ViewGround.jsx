@@ -73,6 +73,7 @@ const ViewGround = () => {
       );
       //http://localhost:5000/api/ground/GND18NT79YDS?date=2024-12-25
       setBookings(response.data.slots.booked || []);
+      setSelectedSlots([]);
     } catch (error) {
       console.error("Error fetching ground details:", error);
     }
@@ -96,61 +97,99 @@ const ViewGround = () => {
   const handleCloseModal = () => {
     setShowModal(false); // Close the modal
   };
-  const handleBookClick = async () => {
-    const slotsForAPI = selectedSlots.map(reverseFormatSlot);
-    if (selectedSlots.length > 0) {
-      const bookingData = {
-        ground_id: gid, // Ground ID from route params
-        date: new Date().toISOString().slice(0, 10), // Current date in 'YYYY-MM-DD' format
-        slots: slotsForAPI, // Selected slots
-        combopack: true, // Assuming you want combopack true, can be dynamic if needed
-      };
+  // const handleBookClick = async () => {
+  //   const slotsForAPI = selectedSlots.map(reverseFormatSlot);
+  //   if (selectedSlots.length > 0) {
+  //     const bookingData = {
+  //       ground_id: gid, // Ground ID from route params
+  //       date: new Date().toISOString().slice(0, 10), // Current date in 'YYYY-MM-DD' format
+  //       slots: slotsForAPI, // Selected slots
+  //       combopack: true, // Assuming you want combopack true, can be dynamic if needed
+  //     };
 
-      try {
-        const response = await axios.post(
-          `${baseUrl}/api/booking/book-slot`,
-          bookingData
-        );
+  //     try {
+  //       const response = await axios.post(
+  //         `${baseUrl}/api/booking/book-slot`,
+  //         bookingData
+  //       );
 
-        if (response.status === 200) {
-          navigate(`/booking/${gid}`);
-        } else {
-          alert("Booking failed, please try again.");
-        }
-      } catch (error) {
-        console.error("Error during booking:", error);
-        alert("An error occurred while booking. Please try again later.");
-      }
-    } else {
-      alert("Please select at least one slot to book.");
-    }
+  //       if (response.status === 200) {
+  //         navigate(`/booking/${gid}`);
+  //       } else {
+  //         alert("Booking failed, please try again.");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error during booking:", error);
+  //       alert("An error occurred while booking. Please try again later.");
+  //     }
+  //   } else {
+  //     alert("Please select at least one slot to book.");
+  //   }
+  // };
+  // const now = new Date();
+  // let hours = now.getHours(); // Current hour (0-23)
+  // const minutes = now.getMinutes(); // Current minute (0-59)
+  // const ampm = hours >= 12 ? 'PM' : 'AM'; // Determine AM or PM
+  // hours = hours % 12 || 12; // Convert 0 to 12 for midnight and 13-23 to 1-11
+  // const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')} ${ampm}`;
+  // console.log(formattedTime, 'currenttime'); // e.g., "02:07 PM"
+  
+  
+  // const handleSlotClick = (slot) => {
+
+  //   console.log(convertSlotToTimeRange(slot),formattedTime, 'selectedslot');
+  //   if (selectedSlots.includes(slot)) {
+     
+  //     setSelectedSlots(selectedSlots.filter((s) => s !== slot));
+  //   } else {
+  //     setSelectedSlots([...selectedSlots, slot]);
+  //   }
+  // };
+  const now = new Date();
+  let hours = now.getHours(); // Current hour (0-23)
+  const minutes = now.getMinutes(); // Current minute (0-59)
+  const ampm = hours >= 12 ? 'PM' : 'AM'; // Determine AM or PM
+  hours = hours % 12 || 12; // Convert 0 to 12 for midnight and 13-23 to 1-11
+  const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')} ${ampm}`;
+
+  const isSlotPastCurrentTime = (slotTime) => {
+    const [slotHour, slotMinutes] = slotTime.split(":").map(Number); 
+    const slotDate = new Date();
+    slotDate.setHours(slotHour, slotMinutes, 0, 0); // Create a Date object for the slot time
+    return slotDate < now; // Checks if the slot is in the past compared to current time
   };
 
   const handleSlotClick = (slot) => {
-    if (selectedSlots.includes(slot)) {
-      setSelectedSlots(selectedSlots.filter((s) => s !== slot));
-    } else {
-      setSelectedSlots([...selectedSlots, slot]);
+    const slotTime = formatSlot(slot);
+    if (isSlotPastCurrentTime(slotTime)) {
+      alert("Please select a current or future time slot");
+      return;
     }
-  };
 
-  if (loading) return  <div
-  className="d-flex justify-content-center align-items-center"
-  style={{ height: "300px" }}
->
-  <img
-    src={loaderGif}
-    alt="Loading..."
-    className="img-fluid loadergifimage"
-  />
-</div>;
+    setSelectedSlots((prevSelected) =>
+      prevSelected.includes(slot)
+        ? prevSelected.filter((s) => s !== slot)
+        : [...prevSelected, slot]
+    );
+  };
+console.log(selectedSlots, 'selectedslots');
+  if (loading) return <div
+    className="d-flex justify-content-center align-items-center"
+    style={{ height: "300px" }}
+  >
+    <img
+      src={loaderGif}
+      alt="Loading..."
+      className="img-fluid loadergifimage"
+    />
+  </div>;
 
   if (error) return <div>Error: {error}</div>;
   if (!ground) return <div>No ground data available</div>;
-console.log(ground,'grounddetails');
+  console.log(ground, 'grounddetails');
   const { name, location, data, slots } = ground;
   const imageUrl = data?.photo || groundImage;
-  console.log(data.image,'imageurl');
+  console.log(data.image, 'imageurl');
   const description = data?.desc || "No Description";
   const bookedSlots = slots?.booked || [];
   // const allSlots = ['6.0', '6.5', '7.0', '7.5', '8.0', '8.5', '9.0', '9.5', '10.0', '10.5', '11.0', '11.5', '12.0', '12.5', '1.0', '1.5', '2.0' , '2.5' , '3.0','3.5','4.0','4.5','5.0','5.5','6.0','6.5','7.0','7.5','8.0','8.5','9.0','10.0','10.5','11.0','11.5','12.0','12.5','13.0','13.5'];
@@ -162,7 +201,7 @@ console.log(ground,'grounddetails');
     "22.0", "22.5", "23.0", "23.5", "24.0", "24.5", "0.0", "0.5",
     "1.0", "1.5"
   ]
-  
+
 
   // Helper function to convert slot value to time range with AM/PM
   const availableSlots = allSlots
@@ -171,56 +210,95 @@ console.log(ground,'grounddetails');
   const bookedslotsbydate = bookings.map(formatSlot);
 
   const convertSlotToTimeRange = (slot) => {
+   
     let [hours, half] = slot.split(".").map(Number);
-
+  
     // Initialize variables for time range
-    let startHour, startMinutes, endHour, endMinutes, period, endPeriod;
-
+    let startHour, startMinutes, endHour, endMinutes, startPeriod, endPeriod;
+  
     // Determine the start time
-    if (hours >= 0 && hours < 6) {
-      // Early morning slots (12 AM - 6 AM)
+    if (hours >= 0 && hours < 12) {
+      // Morning slots (12 AM to 11:59 AM)
       startHour = hours === 0 ? 12 : hours; // Convert 0 to 12 for midnight
       startMinutes = half === 0 ? "00" : "30";
-      period = "AM";
-    } else if (hours >= 6 && hours < 12) {
-      // Morning slots (6 AM - 12 PM)
-      startHour = hours;
-      startMinutes = half === 0 ? "00" : "30";
-      period = "AM";
-    } else if (hours === 12) {
-      // Noon slots (12 PM)
-      startHour = 12;
-      startMinutes = half === 0 ? "00" : "30";
-      period = "PM";
+      startPeriod = "AM";
     } else {
-      // Afternoon and evening slots (1 PM - 11 PM)
-      startHour = hours - 12; // Convert to 12-hour format
+      // Afternoon and evening slots (12 PM to 11:59 PM)
+      startHour = hours === 12 ? 12 : hours - 12; // Convert to 12-hour format
       startMinutes = half === 0 ? "00" : "30";
-      period = "PM";
+      startPeriod = "PM";
     }
-
+  
     // Determine the end time
-    endHour = half === 0 ? startHour : startHour === 12 ? 1 : startHour + 1;
-    endMinutes = half === 0 ? "30" : "00";
-    endPeriod = endHour >= 12 ? "PM" : "AM"; // Adjust for end time period
-
-    // Correct the end hour if it exceeds 12
-    if (endHour > 12) {
-      endHour -= 12;
+    if (half === 0) {
+      // If half is 0 (start at :00), end at :30 within the same hour
+      endHour = startHour;
+      endMinutes = "30";
+      endPeriod = startPeriod;
+    } else {
+      // If half is 1 (start at :30), end at :00 of the next hour
+      endHour = startHour === 12 ? 1 : startHour + 1; // Handle 12 -> 1 transition
+      endMinutes = "00";
+      endPeriod = startHour === 11 && startPeriod === "AM" ? "PM" :
+                  startHour === 11 && startPeriod === "PM" ? "AM" : startPeriod; // Handle AM/PM transitions
     }
-
-    // Return the formatted time range
-    return `${startHour}:${startMinutes} ${period} - ${endHour}:${endMinutes} ${endPeriod}`;
+    const slottime =  `${startHour}:${startMinutes} ${startPeriod} - ${endHour}:${endMinutes} ${endPeriod}`
+    console.log('avlslots', slottime, '----', 'currenttime', formattedTime)
+    // Format and return the time range
+    return `${startHour}:${startMinutes} ${startPeriod} - ${endHour}:${endMinutes} ${endPeriod}`;
   };
+  
+  // const convertSlotToTimeRange = (slot) => {
+  //   let [hours, half] = slot.split(".").map(Number);
+
+  //   // Initialize variables for time range
+  //   let startHour, startMinutes, endHour, endMinutes, period, endPeriod;
+
+  //   // Determine the start time
+  //   if (hours >= 0 && hours < 6) {
+  //     // Early morning slots (12 AM - 6 AM)
+  //     startHour = hours === 0 ? 12 : hours; // Convert 0 to 12 for midnight
+  //     startMinutes = half === 0 ? "00" : "30";
+  //     period = "AM";
+  //   } else if (hours >= 6 && hours < 12) {
+  //     // Morning slots (6 AM - 12 PM)
+  //     startHour = hours;
+  //     startMinutes = half === 0 ? "00" : "30";
+  //     period = "AM";
+  //   } else if (hours === 12) {
+  //     // Noon slots (12 PM)
+  //     startHour = 12;
+  //     startMinutes = half === 0 ? "00" : "30";
+  //     period = "PM";
+  //   } else {
+  //     // Afternoon and evening slots (1 PM - 11 PM)
+  //     startHour = hours - 12; // Convert to 12-hour format
+  //     startMinutes = half === 0 ? "00" : "30";
+  //     period = "PM";
+  //   }
+
+  //   // Determine the end time
+  //   endHour = half === 0 ? startHour : startHour === 12 ? 1 : startHour + 1;
+  //   endMinutes = half === 0 ? "30" : "00";
+  //   endPeriod = endHour >= 12 ? "PM" : "AM"; // Adjust for end time period
+
+  //   // Correct the end hour if it exceeds 12
+  //   if (endHour > 12) {
+  //     endHour -= 12;
+  //   }
+
+  //   // Return the formatted time range
+  //   return `${startHour}:${startMinutes} ${period} - ${endHour}:${endMinutes} ${endPeriod}`;
+  // };
   return (
-    <section>
+    <section className="viewcardbg">
       <div className="selectdatesection">
         <div className="container">
           <div className="row">
             <div className="col-lg-8 col-md-12 col-sm-12">
               <div >
                 <DatePicker
-                 
+
                   selected={selectedDate}
                   onChange={(date) => {
                     if (date) {
@@ -230,7 +308,7 @@ console.log(ground,'grounddetails');
                   }}
                   dateFormat="MMMM d, yyyy"
                   className="form-control"
-                 
+
                 />
               </div>
             </div>
@@ -243,14 +321,14 @@ console.log(ground,'grounddetails');
           </div>
         </div>
       </div>
-      <div className="container-fluid viewcardbg pt-3">
+      <div className="container-fluid  pt-3">
         {/* Available Slots Section */}
         <div className="mobileconfirmnow d-sm-none d-flex justify-content-center my-3">
           <button
             variant="primary"
             className="btn btn-primary confirmbtn"
             onClick={confirnnowClick}
-            disabled={selectedSlots.length === 0} 
+            disabled={selectedSlots.length === 0}
           >
             Confirm Now
           </button>
@@ -258,7 +336,7 @@ console.log(ground,'grounddetails');
 
         <div className="row">
           <div className="col-lg-8 col-sm-12 col-md-12 ">
-            <div className="d-flex  justify-content-evenly justify-content-md-start flex-wrap mb-3" style={{backgroundColor: "#006849"}}>
+            <div className="d-flex  justify-content-evenly justify-content-md-start flex-wrap mb-3" style={{ backgroundColor: "#006849" }}>
               <div>
                 <div>
                   <h6 className="teritoryFont text-light text-center mt-3">
@@ -269,11 +347,10 @@ console.log(ground,'grounddetails');
                       availableSlots.map((slot, index) => (
                         <li key={index} className="listbox m-1">
                           <button
-                            className={`btn ${
-                              selectedSlots.includes(slot)
+                            className={`btn ${selectedSlots.includes(slot)
                                 ? "btn-success"
                                 : "btn-primary"
-                            } btn-sm availablebtn`}
+                              } btn-sm availablebtn`}
                             onClick={() => handleSlotClick(slot)}
                           >
                             {convertSlotToTimeRange(slot)}
@@ -314,32 +391,33 @@ console.log(ground,'grounddetails');
             </div>
           </div>
           <div className="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-xlg-6 g-0  ">
-          <div className="card shadow-lg border-0 w-80 rounded secondaryColor viewcardFont mt-3 mx-auto">
-  <div className="mobileconfirmnow d-flex justify-content-center my-3">
-    <button
-      variant="primary"
-      className="btn btn-primary confirmbtn"
-      onClick={confirnnowClick}
-    >
-      Confirm Now
-    </button>
-  </div>
-  <div className="d-flex justify-content-center">
-    <img
-      src={`${baseUrl}/uploads/${data.image}`}
-      className="card-img-top ground-image img-fluid mb-3"
-      alt={name || "Ground Image"}
-      style={{ width: '300px', height: '200px' }} 
-    />
-  </div>
-  <div className="card-body text-center">
-    <h5 className="card-title">{name || "No Name"}</h5>
-    <h6 className="card-subtitle mb-2 viewcardFont">
-      Location: {location || "No Location"}
-    </h6>
-    <p className="card-text viewcardFont">{description}</p>
-  </div>
-</div>
+            <div className="card shadow-lg border-0 w-80 rounded secondaryColor viewcardFont  mx-auto">
+              <div className="mobileconfirmnow d-flex justify-content-center my-3">
+                <button
+                  variant="primary"
+                  className="btn btn-primary confirmbtn"
+                  onClick={confirnnowClick}
+                  disabled={selectedSlots.length === 0}
+                >
+                  Confirm Now
+                </button>
+              </div>
+              <div className="d-flex justify-content-center">
+                <img
+                  src={`${baseUrl}/uploads/${data.image}`}
+                  className="card-img-top ground-image img-fluid mb-3"
+                  alt={name || "Ground Image"}
+                  style={{ width: '300px', height: '200px' }}
+                />
+              </div>
+              <div className="card-body text-center">
+                <h5 className="card-title">{name || "No Name"}</h5>
+                <h6 className="card-subtitle mb-2 viewcardFont">
+                  Location: {location || "No Location"}
+                </h6>
+                <p className="card-text viewcardFont">{description}</p>
+              </div>
+            </div>
 
           </div>
         </div>

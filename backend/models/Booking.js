@@ -28,8 +28,13 @@ const bookingSchema = new mongoose.Schema({
       required: true,
     },
   },
+  paymentStatus: {
+    type: String,
+    enum: ["pending", "success", "failed"],
+    default: "pending", // Default payment status
+  },
 });
 
-// Export the model using ES6 syntax
+// Export the model
 const Booking = mongoose.model('Booking', bookingSchema);
 export default Booking;

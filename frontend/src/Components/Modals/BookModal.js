@@ -11,6 +11,7 @@ const BookModal = ({
   selectedSlots = [],
   selectdate,
 }) => {
+  console.log(selectedSlots,'selectedslots')
   const { gid } = useParams();
   const navigate = useNavigate();
   const [info, setInfo] = useState("");
