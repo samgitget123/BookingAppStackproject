@@ -73,7 +73,6 @@ const ViewGround = () => {
       );
       //http://localhost:5000/api/ground/GND18NT79YDS?date=2024-12-25
       setBookings(response.data.slots.booked || []);
-      setSelectedSlots([]);
     } catch (error) {
       console.error("Error fetching ground details:", error);
     }
@@ -97,109 +96,44 @@ const ViewGround = () => {
   const handleCloseModal = () => {
     setShowModal(false); // Close the modal
   };
-  // const handleBookClick = async () => {
-  //   const slotsForAPI = selectedSlots.map(reverseFormatSlot);
-  //   if (selectedSlots.length > 0) {
-  //     const bookingData = {
-  //       ground_id: gid, // Ground ID from route params
-  //       date: new Date().toISOString().slice(0, 10), // Current date in 'YYYY-MM-DD' format
-  //       slots: slotsForAPI, // Selected slots
-  //       combopack: true, // Assuming you want combopack true, can be dynamic if needed
-  //     };
+  const handleBookClick = async () => {
+    const slotsForAPI = selectedSlots.map(reverseFormatSlot);
+    if (selectedSlots.length > 0) {
+      const bookingData = {
+        ground_id: gid, // Ground ID from route params
+        date: new Date().toISOString().slice(0, 10), // Current date in 'YYYY-MM-DD' format
+        slots: slotsForAPI, // Selected slots
+        combopack: true, // Assuming you want combopack true, can be dynamic if needed
+      };
 
-  //     try {
-  //       const response = await axios.post(
-  //         `${baseUrl}/api/booking/book-slot`,
-  //         bookingData
-  //       );
+      try {
+        const response = await axios.post(
+          `${baseUrl}/api/booking/book-slot`,
+          bookingData
+        );
 
-  //       if (response.status === 200) {
-  //         navigate(`/booking/${gid}`);
-  //       } else {
-  //         alert("Booking failed, please try again.");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error during booking:", error);
-  //       alert("An error occurred while booking. Please try again later.");
-  //     }
-  //   } else {
-  //     alert("Please select at least one slot to book.");
-  //   }
-  // };
-  // const now = new Date();
-  // let hours = now.getHours(); // Current hour (0-23)
-  // const minutes = now.getMinutes(); // Current minute (0-59)
-  // const ampm = hours >= 12 ? 'PM' : 'AM'; // Determine AM or PM
-  // hours = hours % 12 || 12; // Convert 0 to 12 for midnight and 13-23 to 1-11
-  // const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')} ${ampm}`;
-  // console.log(formattedTime, 'currenttime'); // e.g., "02:07 PM"
-  
-  
-  // const handleSlotClick = (slot) => {
+        if (response.status === 200) {
+          navigate(`/booking/${gid}`);
+        } else {
+          alert("Booking failed, please try again.");
+        }
+      } catch (error) {
+        console.error("Error during booking:", error);
+        alert("An error occurred while booking. Please try again later.");
+      }
+    } else {
+      alert("Please select at least one slot to book.");
+    }
+  };
 
-  //   console.log(convertSlotToTimeRange(slot),formattedTime, 'selectedslot');
-  //   if (selectedSlots.includes(slot)) {
-     
-  //     setSelectedSlots(selectedSlots.filter((s) => s !== slot));
-  //   } else {
-  //     setSelectedSlots([...selectedSlots, slot]);
-  //   }
-  // };
-  const now = new Date();
-let hours = now.getHours(); // Current hour (0-23)
-const minutes = now.getMinutes(); // Current minute (0-59)
-const ampm = hours >= 12 ? 'PM' : 'AM'; // Determine AM or PM
-hours = hours % 12 || 12; // Convert 0 to 12 for midnight and 13-23 to 1-11
-const formattedTime = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')} ${ampm}`;
+  const handleSlotClick = (slot) => {
+    if (selectedSlots.includes(slot)) {
+      setSelectedSlots(selectedSlots.filter((s) => s !== slot));
+    } else {
+      setSelectedSlots([...selectedSlots, slot]);
+    }
+  };
 
-
-// Function to compare slot time with current time
-// const isSlotPastCurrentTime = (slotTime) => {
-//   const [slotHours, slotMinutes] = slotTime.split(':').map(Number); // Split slot time (e.g., "14:30")
-//   const slotDate = new Date();
-//   console.log(slotDate,'slottime')
-//   slotDate.setHours(slotHours, slotMinutes, 0, 0); // Create a Date object for the slot
-
-//   return slotDate < now; // Check if the slot is in the past
-// };
-const isSlotPastCurrentTime = (slotTime) => {
-  const [slotHour, slotMinutes] = slotTime.split(":").map(Number); 
-  const slotDate = new Date();
-  slotDate.setHours(slotHour, slotMinutes, 0, 0); // Create a Date object for the slot time
-  return slotDate < now; // Checks if the slot is in the past compared to current time
-};
-
-// const handleSlotClick = (slot) => {
-//   const slotTime = convertSlotToTimeRange(slot); // Assume slot is in "HH:mm" format
-//   console.log(slotTime, formattedTime,isSlotPastCurrentTime(slot), 'selectedslot');
-
-//   // Check if the slot is in the past
-//   if (isSlotPastCurrentTime(slotTime)) {
-//     alert('Please select a current or future time slot');
-//     return;
-//   }
-
-//   if (selectedSlots.includes(slot)) {
-//     setSelectedSlots(selectedSlots.filter((s) => s !== slot));
-//   } else {
-//     setSelectedSlots([...selectedSlots, slot]);
-//   }
-// };
-const handleSlotClick = (slot) => {
-  const slotTime = convertSlotToTimeRange(slot);
-  if (isSlotPastCurrentTime(slotTime)) {
-    alert("Please select a current or future time slot");
-    return;
-  }
-
-  setSelectedSlots((prevSelected) =>
-    prevSelected.includes(slot)
-      ? prevSelected.filter((s) => s !== slot)
-      : [...prevSelected, slot]
-  );
-};
-
-console.log(selectedSlots, 'selectedslots');
   if (loading) return <div
     className="d-flex justify-content-center align-items-center"
     style={{ height: "300px" }}
@@ -237,86 +171,47 @@ console.log(selectedSlots, 'selectedslots');
   const bookedslotsbydate = bookings.map(formatSlot);
 
   const convertSlotToTimeRange = (slot) => {
-   
     let [hours, half] = slot.split(".").map(Number);
-  
+
     // Initialize variables for time range
-    let startHour, startMinutes, endHour, endMinutes, startPeriod, endPeriod;
-  
+    let startHour, startMinutes, endHour, endMinutes, period, endPeriod;
+
     // Determine the start time
-    if (hours >= 0 && hours < 12) {
-      // Morning slots (12 AM to 11:59 AM)
+    if (hours >= 0 && hours < 6) {
+      // Early morning slots (12 AM - 6 AM)
       startHour = hours === 0 ? 12 : hours; // Convert 0 to 12 for midnight
       startMinutes = half === 0 ? "00" : "30";
-      startPeriod = "AM";
-    } else {
-      // Afternoon and evening slots (12 PM to 11:59 PM)
-      startHour = hours === 12 ? 12 : hours - 12; // Convert to 12-hour format
+      period = "AM";
+    } else if (hours >= 6 && hours < 12) {
+      // Morning slots (6 AM - 12 PM)
+      startHour = hours;
       startMinutes = half === 0 ? "00" : "30";
-      startPeriod = "PM";
-    }
-  
-    // Determine the end time
-    if (half === 0) {
-      // If half is 0 (start at :00), end at :30 within the same hour
-      endHour = startHour;
-      endMinutes = "30";
-      endPeriod = startPeriod;
+      period = "AM";
+    } else if (hours === 12) {
+      // Noon slots (12 PM)
+      startHour = 12;
+      startMinutes = half === 0 ? "00" : "30";
+      period = "PM";
     } else {
-      // If half is 1 (start at :30), end at :00 of the next hour
-      endHour = startHour === 12 ? 1 : startHour + 1; // Handle 12 -> 1 transition
-      endMinutes = "00";
-      endPeriod = startHour === 11 && startPeriod === "AM" ? "PM" :
-                  startHour === 11 && startPeriod === "PM" ? "AM" : startPeriod; // Handle AM/PM transitions
+      // Afternoon and evening slots (1 PM - 11 PM)
+      startHour = hours - 12; // Convert to 12-hour format
+      startMinutes = half === 0 ? "00" : "30";
+      period = "PM";
     }
-    const slottime =  `${startHour}:${startMinutes} ${startPeriod} - ${endHour}:${endMinutes} ${endPeriod}`
-    console.log('avlslots', slottime, '----', 'currenttime', formattedTime)
-    // Format and return the time range
-    return `${startHour}:${startMinutes} ${startPeriod} - ${endHour}:${endMinutes} ${endPeriod}`;
+
+    // Determine the end time
+    endHour = half === 0 ? startHour : startHour === 12 ? 1 : startHour + 1;
+    endMinutes = half === 0 ? "30" : "00";
+    endPeriod = endHour >= 12 ? "PM" : "AM"; // Adjust for end time period
+
+    // Correct the end hour if it exceeds 12
+    if (endHour > 12) {
+      endHour -= 12;
+    }
+
+    // Return the formatted time range
+    return `${startHour}:${startMinutes} ${period} - ${endHour}:${endMinutes} ${endPeriod}`;
   };
-  
-  // const convertSlotToTimeRange = (slot) => {
-  //   let [hours, half] = slot.split(".").map(Number);
-
-  //   // Initialize variables for time range
-  //   let startHour, startMinutes, endHour, endMinutes, period, endPeriod;
-
-  //   // Determine the start time
-  //   if (hours >= 0 && hours < 6) {
-  //     // Early morning slots (12 AM - 6 AM)
-  //     startHour = hours === 0 ? 12 : hours; // Convert 0 to 12 for midnight
-  //     startMinutes = half === 0 ? "00" : "30";
-  //     period = "AM";
-  //   } else if (hours >= 6 && hours < 12) {
-  //     // Morning slots (6 AM - 12 PM)
-  //     startHour = hours;
-  //     startMinutes = half === 0 ? "00" : "30";
-  //     period = "AM";
-  //   } else if (hours === 12) {
-  //     // Noon slots (12 PM)
-  //     startHour = 12;
-  //     startMinutes = half === 0 ? "00" : "30";
-  //     period = "PM";
-  //   } else {
-  //     // Afternoon and evening slots (1 PM - 11 PM)
-  //     startHour = hours - 12; // Convert to 12-hour format
-  //     startMinutes = half === 0 ? "00" : "30";
-  //     period = "PM";
-  //   }
-
-  //   // Determine the end time
-  //   endHour = half === 0 ? startHour : startHour === 12 ? 1 : startHour + 1;
-  //   endMinutes = half === 0 ? "30" : "00";
-  //   endPeriod = endHour >= 12 ? "PM" : "AM"; // Adjust for end time period
-
-  //   // Correct the end hour if it exceeds 12
-  //   if (endHour > 12) {
-  //     endHour -= 12;
-  //   }
-
-  //   // Return the formatted time range
-  //   return `${startHour}:${startMinutes} ${period} - ${endHour}:${endMinutes} ${endPeriod}`;
-  // };
   return (
     <section className="viewcardbg">
       <div className="selectdatesection">
@@ -424,7 +319,6 @@ console.log(selectedSlots, 'selectedslots');
                   variant="primary"
                   className="btn btn-primary confirmbtn"
                   onClick={confirnnowClick}
-                  disabled={selectedSlots.length === 0}
                 >
                   Confirm Now
                 </button>

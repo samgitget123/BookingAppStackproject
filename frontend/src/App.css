@@ -33,6 +33,11 @@ body {
   min-height: 100vh; /* Full height of the viewport */
 }
 /************divinded line**********/
+/*******slot book button disable****/
+.slot-button.disabled {
+  background-color: #f0f0f0;
+  cursor: not-allowed;
+}
 
 
 /* Main content should expand to fill the remaining space */

@@ -10,6 +10,8 @@ import loaderGif from "../../Images/loader.gif";
 import BookModal from "../Modals/BookModal";
 import { useBaseUrl } from "../../Contexts/BaseUrlContext";
 
+
+
 // Helper function to reverse format slot
 const reverseFormatSlot = (formattedSlot) => {
   const [startTime] = formattedSlot.split(" - ");
@@ -37,9 +39,9 @@ const ViewGround = () => {
   const { ground, loading, error } = groundState;
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [bookings, setBookings] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  console.log(selectedDate,'selectedDate')
+  const [bookings, setBookings] = useState([]);
+
   useEffect(() => {
     if (gid) {
       dispatch(fetchGroundDetails(gid));
@@ -58,7 +60,7 @@ const ViewGround = () => {
       console.error("Error fetching ground details:", error);
     }
   };
-console.log(bookings, 'grounddetails')
+
   const handleDateChange = (date) => {
     if (date) {
       setSelectedDate(date);
@@ -77,35 +79,35 @@ console.log(bookings, 'grounddetails')
   const handleCloseModal = () => {
     setShowModal(false); // Close the modal
   };
-  // const handleBookClick = async () => {
-  //   const slotsForAPI = selectedSlots.map(reverseFormatSlot);
-  //   if (selectedSlots.length > 0) {
-  //     const bookingData = {
-  //       ground_id: gid, // Ground ID from route params
-  //       date: new Date().toISOString().slice(0, 10), // Current date in 'YYYY-MM-DD' format
-  //       slots: slotsForAPI, // Selected slots
-  //       combopack: true, // Assuming you want combopack true, can be dynamic if needed
-  //     };
+  const handleBookClick = async () => {
+    const slotsForAPI = selectedSlots.map(reverseFormatSlot);
+    if (selectedSlots.length > 0) {
+      const bookingData = {
+        ground_id: gid, // Ground ID from route params
+        date: new Date().toISOString().slice(0, 10), // Current date in 'YYYY-MM-DD' format
+        slots: slotsForAPI, // Selected slots
+        combopack: true, // Assuming you want combopack true, can be dynamic if needed
+      };
 
-  //     try {
-  //       const response = await axios.post(
-  //         `${baseUrl}/api/booking/book-slot`,
-  //         bookingData
-  //       );
+      try {
+        const response = await axios.post(
+          `${baseUrl}/api/booking/book-slot`,
+          bookingData
+        );
 
-  //       if (response.status === 200) {
-  //         navigate(`/booking/${gid}`);
-  //       } else {
-  //         alert("Booking failed, please try again.");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error during booking:", error);
-  //       alert("An error occurred while booking. Please try again later.");
-  //     }
-  //   } else {
-  //     alert("Please select at least one slot to book.");
-  //   }
-  // };
+        if (response.status === 200) {
+          navigate(`/booking/${gid}`);
+        } else {
+          alert("Booking failed, please try again.");
+        }
+      } catch (error) {
+        console.error("Error during booking:", error);
+        alert("An error occurred while booking. Please try again later.");
+      }
+    } else {
+      alert("Please select at least one slot to book.");
+    }
+  };
 
   const handleSlotClick = (slot) => {
     if (selectedSlots.includes(slot)) {
@@ -139,47 +141,33 @@ console.log(bookings, 'grounddetails')
     "10.0", "10.5", "11.0", "11.5", "12.0", "12.5", "13.0", "13.5",
     "14.0", "14.5", "15.0", "15.5", "16.0", "16.5", "17.0", "17.5",
     "18.0", "18.5", "19.0", "19.5", "20.0", "20.5", "21.0", "21.5",
-    "22.0", "22.5", "23.0", "23.5", "24.0", "24.5", "25.0", "25.5",
-    "26.0", "26.5"
+    "22.0", "22.5", "23.0", "23.5", "24.0", "24.5", "0.0", "0.5",
+    "1.0", "1.5"
   ]
+  const now = new Date(); // Get the current date and time
+  const currentHours = now.getHours();
+  const currentMinutes = now.getMinutes();
+  const currentTime =  currentHours + currentMinutes / 60;
   
-  const calculateCurrentTime = (date) => {
-    const now = new Date();
-    const targetDate = new Date(date);
-    if (
-      targetDate.getFullYear() === now.getFullYear() &&
-      targetDate.getMonth() === now.getMonth() &&
-      targetDate.getDate() === now.getDate()
-    ) {
-      const currentHours = now.getHours();
-      const currentMinutes = now.getMinutes();
-      return currentHours + currentMinutes / 60;
-    }
-    return 0; // For future dates, no restriction on time
-  };
-  
-const bookedslotsbydate = bookings.map(formatSlot);
-
-// Then, filter available slots
-const availableSlots = allSlots
-  .filter((slot) => !bookings.includes(slot) && !bookedslotsbydate.includes(slot))  // Exclude both bookings and bookedslotsbydate
-  .map(formatSlot);
-
-  
+  const availableSlots = allSlots
+    .filter(slot => slot >= currentTime && !bookings.includes(slot))
+    .map(formatSlot);
+  const bookedslotsbydate = bookings.map(formatSlot);
+  console.log(currentTime, availableSlots, 'slotsss')
   const convertSlotToTimeRange = (slot) => {
     let [hours, half] = slot.split(".").map(Number);
-  
+
     // Initialize variables for time range
     let startHour, startMinutes, endHour, endMinutes, period, endPeriod;
-  
+
     // Determine the start time
-    if (hours === 0) {
-      // Midnight (12 AM)
-      startHour = 12;
+    if (hours >= 0 && hours < 6) {
+      // Early morning slots (12 AM - 6 AM)
+      startHour = hours === 0 ? 12 : hours; // Convert 0 to 12 for midnight
       startMinutes = half === 0 ? "00" : "30";
       period = "AM";
-    } else if (hours >= 1 && hours < 12) {
-      // Morning slots (1 AM - 11 AM)
+    } else if (hours >= 6 && hours < 12) {
+      // Morning slots (6 AM - 12 PM)
       startHour = hours;
       startMinutes = half === 0 ? "00" : "30";
       period = "AM";
@@ -194,39 +182,20 @@ const availableSlots = allSlots
       startMinutes = half === 0 ? "00" : "30";
       period = "PM";
     }
-  
+
     // Determine the end time
-    if (half === 0) {
-      // If the slot starts at :00, the next half hour ends at :30
-      endHour = hours;
-      endMinutes = "30";
-    } else {
-      // If the slot starts at :30, the next hour starts at :00
-      endHour = hours + 1;
-      endMinutes = "00";
-    }
-  
-    // Determine the end period
-    if (endHour === 24) {
-      // If the end hour is 24 (midnight), reset to 12 AM
-      endHour = 12;
-      endPeriod = "AM";
-    } else if (endHour === 12) {
-      // Noon
-      endPeriod = "PM";
-    } else if (endHour > 12) {
-      // Convert to PM if greater than 12
+    endHour = half === 0 ? startHour : startHour === 12 ? 1 : startHour + 1;
+    endMinutes = half === 0 ? "30" : "00";
+    endPeriod = endHour >= 12 ? "PM" : "AM"; // Adjust for end time period
+
+    // Correct the end hour if it exceeds 12
+    if (endHour > 12) {
       endHour -= 12;
-      endPeriod = "PM";
-    } else {
-      // For hours less than 12
-      endPeriod = "AM";
     }
-  
+
     // Return the formatted time range
     return `${startHour}:${startMinutes} ${period} - ${endHour}:${endMinutes} ${endPeriod}`;
   };
-  
   return (
     <section className="viewcardbg">
       <div className="selectdatesection">
@@ -239,7 +208,7 @@ const availableSlots = allSlots
                   selected={selectedDate}
                   onChange={(date) => {
                     if (date) {
-                      setSelectedDate(formatDate(date));
+                      setSelectedDate(date);
                       fetchGroundDetailsWithDate(formatDate(date));
                     }
                   }}
@@ -285,14 +254,10 @@ const availableSlots = allSlots
                         <li key={index} className="listbox m-1">
                           <button
                             className={`btn ${selectedSlots.includes(slot)
-                              ? "btn-success"
-                              : "btn-primary"
+                                ? "btn-success"
+                                : "btn-primary"
                               } btn-sm availablebtn`}
                             onClick={() => handleSlotClick(slot)}
-                            disabled={
-                              bookedslotsbydate.includes(slot) || 
-                              parseFloat(slot) < calculateCurrentTime(selectedDate) // Disable slots earlier than the current time
-                            }
                           >
                             {convertSlotToTimeRange(slot)}
                           </button>
@@ -303,7 +268,6 @@ const availableSlots = allSlots
                     )}
                   </ul>
                 </div>
-
               </div>
               <div className="mt-sm-3 d-flex ">
                 <div className="text-center">
