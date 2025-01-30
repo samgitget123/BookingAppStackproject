@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchGroundDetails } from "../../Features/groundSlice";
 import groundImage from "../../Images/turf.jpeg";
@@ -9,6 +9,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import loaderGif from "../../Images/loader.gif";
 import BookModal from "../Modals/BookModal";
 import { useBaseUrl } from "../../Contexts/BaseUrlContext";
+import CartButtons from "../Buttons/CartButtons";
 
 // Helper function to reverse format slot
 const reverseFormatSlot = (formattedSlot) => {
@@ -31,21 +32,26 @@ const formatDate = (date) => {
 const ViewGround = () => {
   const { gid } = useParams();
   const dispatch = useDispatch();
+  const myObject = useSelector((state) => state.object.myObject);
+  console.log(myObject, 'bookingdetails')
   const { baseUrl } = useBaseUrl();
   const navigate = useNavigate();
   const groundState = useSelector((state) => state.ground || {});
+ // const bookingDetails = useSelector((state) => state.ground.bookingStatus);
   const { ground, loading, error } = groundState;
   const [selectedSlots, setSelectedSlots] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [bookings, setBookings] = useState([]);
   const [selectedDate, setSelectedDate] = useState(new Date());
-  console.log(selectedDate,'selectedDate')
+ // console.log(bookingDetails,'bookingDetails')
   useEffect(() => {
     if (gid) {
       dispatch(fetchGroundDetails(gid));
-      fetchGroundDetailsWithDate(formatDate(selectedDate));
     }
-  }, [dispatch, gid, selectedDate]);
+  }, [dispatch, gid]);
+  useEffect(() => {
+    fetchGroundDetailsWithDate(formatDate(selectedDate));
+  }, [selectedDate]);
 
   const fetchGroundDetailsWithDate = async (formattedDate) => {
     try {
@@ -77,35 +83,6 @@ console.log(bookings, 'grounddetails')
   const handleCloseModal = () => {
     setShowModal(false); // Close the modal
   };
-  // const handleBookClick = async () => {
-  //   const slotsForAPI = selectedSlots.map(reverseFormatSlot);
-  //   if (selectedSlots.length > 0) {
-  //     const bookingData = {
-  //       ground_id: gid, // Ground ID from route params
-  //       date: new Date().toISOString().slice(0, 10), // Current date in 'YYYY-MM-DD' format
-  //       slots: slotsForAPI, // Selected slots
-  //       combopack: true, // Assuming you want combopack true, can be dynamic if needed
-  //     };
-
-  //     try {
-  //       const response = await axios.post(
-  //         `${baseUrl}/api/booking/book-slot`,
-  //         bookingData
-  //       );
-
-  //       if (response.status === 200) {
-  //         navigate(`/booking/${gid}`);
-  //       } else {
-  //         alert("Booking failed, please try again.");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error during booking:", error);
-  //       alert("An error occurred while booking. Please try again later.");
-  //     }
-  //   } else {
-  //     alert("Please select at least one slot to book.");
-  //   }
-  // };
 
   const handleSlotClick = (slot) => {
     if (selectedSlots.includes(slot)) {
@@ -226,7 +203,31 @@ const availableSlots = allSlots
     // Return the formatted time range
     return `${startHour}:${startMinutes} ${period} - ${endHour}:${endMinutes} ${endPeriod}`;
   };
+  ///get booking details
+  const getBookingdetails = async (gid, date, slots) => {
+    try {
+      //http://localhost:5000/api/booking/getbookingdetails?ground_id=GNDU35Y5LI8D&date=2025-01-29&slots=6.0&slots=
+      // Construct the query string with the given parameters
+
   
+      // Append the slots to the query string
+      //slots.forEach((slot) => query.append('slots', slot));
+  
+      // Make the GET request using axios
+      const response = await axios.get(`http://localhost:5000/api/booking/getbookingdetails?ground_id=${gid}&date=${date}&slots=${slots}&slots=`);
+  
+      // Log the response data or return it
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      // Handle errors
+      console.error('Error fetching booking details:', error);
+      throw error;
+    }
+  };
+  
+
+
   return (
     <section className="viewcardbg">
       <div className="selectdatesection">
@@ -260,17 +261,10 @@ const availableSlots = allSlots
       </div>
       <div className="container-fluid  pt-3">
         {/* Available Slots Section */}
-        <div className="mobileconfirmnow d-sm-none d-flex justify-content-center my-3">
-          <button
-            variant="primary"
-            className="btn btn-primary confirmbtn"
-            onClick={confirnnowClick}
-            disabled={selectedSlots.length === 0}
-          >
-            Confirm Now
-          </button>
+        <div className=" Carticon d-sm-none d-flex justify-content-center my-3">
+        <CartButtons onClick={confirnnowClick}/>
         </div>
-
+        
         <div className="row">
           <div className="col-lg-8 col-sm-12 col-md-12 ">
             <div className="d-flex  justify-content-evenly justify-content-md-start flex-wrap mb-3" style={{ backgroundColor: "#006849" }}>
@@ -290,9 +284,13 @@ const availableSlots = allSlots
                               } btn-sm availablebtn`}
                             onClick={() => handleSlotClick(slot)}
                             disabled={
-                              bookedslotsbydate.includes(slot) || 
-                              parseFloat(slot) < calculateCurrentTime(selectedDate) // Disable slots earlier than the current time
-                            }
+                                // If the date is in the past, disable all slots except booked ones
+                                (new Date(selectedDate).setHours(0, 0, 0, 0) < new Date().setHours(0, 0, 0, 0) &&
+                                  !bookedslotsbydate.includes(slot)) || 
+                                // If the slot is earlier than the current time (for today)
+                                (new Date(selectedDate).setHours(0, 0, 0, 0) === new Date().setHours(0, 0, 0, 0) &&
+                                  parseFloat(slot) < calculateCurrentTime(selectedDate))
+                             }
                           >
                             {convertSlotToTimeRange(slot)}
                           </button>
@@ -311,11 +309,11 @@ const availableSlots = allSlots
                   <ul className="list-unstyled d-flex flex-wrap flex-column flex-sm-row text-center slotboxes">
                     {bookedslotsbydate.length > 0 ? (
                       bookedslotsbydate.map((slot, index) => (
-                        <li key={index} className="listbox m-1 text-center">
+                        <li key={index} className="listbox m-1 text-center" >
                           <button
                             type="button"
                             className="btn btn-secondary btn-sm availablebtn"
-                            disabled
+                         
                           >
                             {convertSlotToTimeRange(slot)}{" "}
                             {/* Format if needed */}
@@ -334,14 +332,8 @@ const availableSlots = allSlots
           </div>
           <div className="col-lg-4 col-md-12 col-sm-12 col-xs-12 col-xlg-6 g-0  ">
             <div className="card shadow-lg border-0 w-80 rounded secondaryColor viewcardFont  mx-auto">
-              <div className="mobileconfirmnow d-flex justify-content-center my-3">
-                <button
-                  variant="primary"
-                  className="btn btn-primary confirmbtn"
-                  onClick={confirnnowClick}
-                >
-                  Confirm Now
-                </button>
+              <div className="mobileconfirmnow Carticon  d-flex justify-content-center my-3">
+                <CartButtons onClick={confirnnowClick} count={selectedSlots}/>
               </div>
               <div className="d-flex justify-content-center">
                 <img

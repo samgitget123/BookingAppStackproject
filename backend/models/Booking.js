@@ -10,7 +10,7 @@ const bookingSchema = new mongoose.Schema({
     required: true,
   },
   slots: {
-    type: [String], 
+    type: [String],
     required: true,
   },
   comboPack: {
@@ -32,6 +32,26 @@ const bookingSchema = new mongoose.Schema({
     type: String,
     enum: ["pending", "success", "failed"],
     default: "pending", // Default payment status
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  mobile: {
+    type: String,
+    required: true,
+    validate: {
+      validator: (v) => /^[0-9]{10}$/.test(v), // Validate for a 10-digit phone number
+      message: (props) => `${props.value} is not a valid phone number!`,
+    },
+  },
+  email: {
+    type: String,
+    required: true,
+    validate: {
+      validator: (v) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(v), // Simple email validation
+      message: (props) => `${props.value} is not a valid email address!`,
+    },
   },
 });
 

@@ -6,7 +6,7 @@ import Ground from "../models/Ground.js";
 import generateBookingID from "../Utils.js";
 
 const bookingGround =  asyncHandler(async (req, res) => {
-    const { ground_id, date, slots, comboPack } = req.body;
+    const { ground_id, date, slots, comboPack, name, mobile, email } = req.body;
 
     const bookingDateformat = new Date(date);
     const bookingDate = bookingDateformat.toISOString().slice(0, 10); // '2025-01-29'
@@ -69,6 +69,9 @@ const bookingGround =  asyncHandler(async (req, res) => {
       date,
       slots,
       comboPack,
+      name,         
+      mobile,       
+      email,        
       book: { booking_id, price: totalPrice },
       paymentStatus: "pending",
     });
@@ -77,12 +80,42 @@ const bookingGround =  asyncHandler(async (req, res) => {
     // Return the success response
     res.status(201).json({
       success: true,
-      data: { ground_id, date, slots, comboPack, price: totalPrice, booking_id },
+      data: { ground_id, date, slots, comboPack, price: totalPrice, booking_id, name, mobile, email },
       message: "Slot booked successfully",
     });
 });
 
-export { bookingGround };
+const getBookings = asyncHandler(async (req, res) => {
+  const { ground_id, date, slots } = req.query;
+
+  // Check if any required fields are missing
+  if (!ground_id || !date || !slots) {
+      return res.status(400).json({ message: "Please provide ground_id, date, and slots" });
+  }
+
+  // Convert slots into an array of strings (in case of single slot input)
+  const selectedSlots = Array.isArray(slots) ? slots : [slots];
+
+  // Find bookings that match the provided filters
+  const bookings = await Booking.find({
+      ground_id,
+      date,
+      slots: { $in: selectedSlots }  // Match any booking with the selected slots
+  });
+
+  if (bookings.length === 0) {
+      return res.status(404).json({ message: "No bookings found for the given filters" });
+  }
+
+  // Return the filtered bookings
+  res.status(200).json({
+      success: true,
+      data: bookings,
+      message: "Bookings retrieved successfully",
+  });
+});
+
+export { bookingGround, getBookings };
 
 
 
